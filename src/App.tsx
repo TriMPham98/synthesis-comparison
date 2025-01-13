@@ -3,6 +3,7 @@ import { OrbitControls, SoftShadows } from "@react-three/drei";
 import { Stack } from "./components/Stack";
 import { ComparisonLines } from "./components/ComparisonLines";
 import { ControlPanel } from "./components/ControlPanel";
+import { ComparisonOperator } from "./components/ComparisonOperator";
 
 export default function App() {
   const leftPosition: [number, number, number] = [-2, 0, 0];
@@ -45,6 +46,7 @@ export default function App() {
         <Stack side="left" position={leftPosition} />
         <Stack side="right" position={rightPosition} />
         <ComparisonLines leftPos={leftPosition} rightPos={rightPosition} />
+        <ComparisonOperator leftPos={leftPosition} rightPos={rightPosition} />
 
         <OrbitControls
           enablePan={false}

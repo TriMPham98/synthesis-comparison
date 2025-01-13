@@ -10,7 +10,7 @@ interface BlockProps {
 
 export function Block({
   position,
-  color = "#86c5d8",
+  color = "#46a2da",
   hover = false,
 }: BlockProps) {
   const meshRef = useRef<Mesh>(null);
