@@ -52,8 +52,8 @@ export default function App() {
           enablePan={false}
           minPolarAngle={Math.PI / 4}
           maxPolarAngle={Math.PI / 2}
-          minDistance={5}
-          maxDistance={15}
+          minDistance={6}
+          maxDistance={18}
           minAzimuthAngle={-Math.PI / 3}
           maxAzimuthAngle={Math.PI / 3}
         />
