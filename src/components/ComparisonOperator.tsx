@@ -33,7 +33,7 @@ export function ComparisonOperator({
   // Calculate centered position between stacks
   const position: [number, number, number] = [
     (leftPos[0] + rightPos[0]) / 2, // Center horizontally
-    verticalCenter, // Center vertically relative to right stack's actual position
+    verticalCenter - 0.3, // Center vertically relative to right stack's actual position
     0,
   ];
 
