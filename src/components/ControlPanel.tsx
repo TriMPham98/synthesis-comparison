@@ -19,9 +19,9 @@ export function ControlPanel() {
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-gray-900/80 text-white p-6 backdrop-blur-md">
       <div className="max-w-4xl mx-auto grid grid-cols-3 gap-6">
-        <div className="space-y-4">
+        <div className="space-y-4 text-center">
           <h3 className="text-xl font-bold">Left Stack</h3>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-center space-x-4">
             <button
               onClick={() => setStack("left", Math.max(0, leftStack - 1))}
               className="p-4 bg-blue-300 rounded-lg hover:bg-blue-400">
@@ -46,9 +46,9 @@ export function ControlPanel() {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 text-center">
           <h3 className="text-xl font-bold">Mode</h3>
-          <div className="flex space-x-4">
+          <div className="flex justify-center space-x-4">
             <button
               onClick={() => setMode("addRemove")}
               className={`p-4 rounded-lg ${
@@ -66,9 +66,9 @@ export function ControlPanel() {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 text-center">
           <h3 className="text-xl font-bold">Right Stack</h3>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-center space-x-4">
             <button
               onClick={() => setStack("right", Math.max(0, rightStack - 1))}
               className="p-4 bg-blue-300 rounded-lg hover:bg-blue-400">
