@@ -10,7 +10,7 @@ interface BlockProps {
 
 export function Block({
   position,
-  color = "#00ff88",
+  color = "#86c5d8",
   hover = false,
 }: BlockProps) {
   const meshRef = useRef<Mesh>(null);
@@ -29,8 +29,8 @@ export function Block({
       <boxGeometry args={[1, 0.5, 1]} />
       <meshStandardMaterial
         color={color}
-        emissive={hover ? color : "#000000"}
-        emissiveIntensity={hover ? 0.5 : 0}
+        emissive={color}
+        emissiveIntensity={hover ? 1.0 : 0.5}
         metalness={0.8}
         roughness={0.2}
       />
