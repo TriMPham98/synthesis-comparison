@@ -54,6 +54,8 @@ export default function App() {
           maxPolarAngle={Math.PI / 2}
           minDistance={5}
           maxDistance={15}
+          minAzimuthAngle={-Math.PI / 3}
+          maxAzimuthAngle={Math.PI / 3}
         />
 
         {/* Ground plane for shadows */}
