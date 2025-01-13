@@ -24,7 +24,7 @@ export function ControlPanel() {
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setStack("left", Math.max(0, leftStack - 1))}
-              className="p-2 bg-purple-600 rounded-lg hover:bg-purple-700">
+              className="p-2 bg-blue-300 rounded-lg hover:bg-blue-400">
               <Minus size={16} />
             </button>
             <input
@@ -40,7 +40,7 @@ export function ControlPanel() {
             />
             <button
               onClick={() => setStack("left", Math.min(10, leftStack + 1))}
-              className="p-2 bg-purple-600 rounded-lg hover:bg-purple-700">
+              className="p-2 bg-blue-300 rounded-lg hover:bg-blue-400">
               <Plus size={16} />
             </button>
           </div>
@@ -71,7 +71,7 @@ export function ControlPanel() {
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setStack("right", Math.max(0, rightStack - 1))}
-              className="p-2 bg-purple-600 rounded-lg hover:bg-purple-700">
+              className="p-2 bg-blue-300 rounded-lg hover:bg-blue-400">
               <Minus size={16} />
             </button>
             <input
@@ -87,7 +87,7 @@ export function ControlPanel() {
             />
             <button
               onClick={() => setStack("right", Math.min(10, rightStack + 1))}
-              className="p-2 bg-purple-600 rounded-lg hover:bg-purple-700">
+              className="p-2 bg-blue-300 rounded-lg hover:bg-blue-400">
               <Plus size={16} />
             </button>
           </div>
