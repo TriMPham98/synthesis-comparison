@@ -4,6 +4,39 @@ import { Stack } from "./components/Stack";
 import { ComparisonLines } from "./components/ComparisonLines";
 import { ControlPanel } from "./components/ControlPanel";
 import { ComparisonOperator } from "./components/ComparisonOperator";
+import { useEffect, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useComparisonStore } from "./store/comparisonStore";
+import * as THREE from "three";
+
+function CameraController() {
+  const camera = useRef();
+  const leftStack = useComparisonStore((state) => state.leftStack);
+  const rightStack = useComparisonStore((state) => state.rightStack);
+
+  useFrame(({ camera }) => {
+    const maxHeight = Math.max(leftStack, rightStack);
+    // Base distance that looks good for small stacks
+    const baseDistance = 10;
+    // Additional distance needed per block
+    const distancePerBlock = 0.8;
+    // Calculate target distance based on stack height
+    const targetDistance = baseDistance + maxHeight * distancePerBlock;
+
+    // Smoothly interpolate current camera position to target position
+    const currentDistance = camera.position.length();
+    const newDistance = THREE.MathUtils.lerp(
+      currentDistance,
+      targetDistance,
+      0.1
+    );
+
+    // Maintain camera angle while adjusting distance
+    camera.position.normalize().multiplyScalar(newDistance);
+  });
+
+  return null;
+}
 
 export default function App() {
   const leftPosition: [number, number, number] = [-2, 0, 0];
@@ -15,6 +48,7 @@ export default function App() {
         camera={{ position: [0, 5, 10], fov: 50 }}
         className="w-full h-full"
         shadows>
+        <CameraController />
         <SoftShadows />
         <color attach="background" args={["#111"]} />
 
@@ -53,7 +87,7 @@ export default function App() {
           minPolarAngle={Math.PI / 4}
           maxPolarAngle={Math.PI / 2}
           minDistance={6}
-          maxDistance={18}
+          maxDistance={24}
           minAzimuthAngle={-Math.PI / 3}
           maxAzimuthAngle={Math.PI / 3}
         />
