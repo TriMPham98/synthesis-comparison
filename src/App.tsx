@@ -40,7 +40,12 @@ export default function App() {
   return (
     <div className="w-full h-screen bg-gray-900">
       <Canvas
-        camera={{ position: [0, 5, 10], fov: 50 }}
+        camera={{
+          position: [0, -10, 0],
+          fov: 50,
+          rotation: [-Math.PI / 2, 0, 0],
+        }} // Rotate to look up
+        className="w-full h-full"
         className="w-full h-full"
         shadows>
         <CameraController />
