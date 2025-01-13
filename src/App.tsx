@@ -16,14 +16,10 @@ function CameraController() {
 
   useFrame(({ camera }) => {
     const maxHeight = Math.max(leftStack, rightStack);
-    // Base distance that looks good for small stacks
     const baseDistance = 10;
-    // Additional distance needed per block
     const distancePerBlock = 0.8;
-    // Calculate target distance based on stack height
     const targetDistance = baseDistance + maxHeight * distancePerBlock;
 
-    // Smoothly interpolate current camera position to target position
     const currentDistance = camera.position.length();
     const newDistance = THREE.MathUtils.lerp(
       currentDistance,
@@ -31,7 +27,6 @@ function CameraController() {
       0.1
     );
 
-    // Maintain camera angle while adjusting distance
     camera.position.normalize().multiplyScalar(newDistance);
   });
 
@@ -95,13 +90,17 @@ export default function App() {
         {/* Ground plane for shadows */}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, -0.25, 0]}
+          position={[0, -3.5, 0]}
           receiveShadow>
           <planeGeometry args={[20, 20]} />
           <meshStandardMaterial color="#111" />
         </mesh>
 
-        <gridHelper args={[20, 20, "#444", "#222"]} />
+        {/* Grid Helper */}
+        <gridHelper
+          args={[20, 20, "#444", "#222"]}
+          position={[0, -3.49, 0]} // Adjusted to be 0.01 above the plane
+        />
       </Canvas>
       <ControlPanel />
     </div>
