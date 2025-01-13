@@ -1,6 +1,6 @@
-import { useRef } from 'react';
-import { Mesh } from 'three';
-import { useFrame } from '@react-three/fiber';
+import { useRef } from "react";
+import { Mesh } from "three";
+import { useFrame } from "@react-three/fiber";
 
 interface BlockProps {
   position: [number, number, number];
@@ -8,13 +8,19 @@ interface BlockProps {
   hover?: boolean;
 }
 
-export function Block({ position, color = '#00ff88', hover = false }: BlockProps) {
+export function Block({
+  position,
+  color = "#00ff88",
+  hover = false,
+}: BlockProps) {
   const meshRef = useRef<Mesh>(null);
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime) * 0.05;
+      meshRef.current.rotation.x =
+        Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
+      meshRef.current.position.y =
+        position[1] + Math.sin(state.clock.elapsedTime) * 0.05;
     }
   });
 
@@ -23,7 +29,7 @@ export function Block({ position, color = '#00ff88', hover = false }: BlockProps
       <boxGeometry args={[1, 0.5, 1]} />
       <meshStandardMaterial
         color={color}
-        emissive={hover ? color : '#000000'}
+        emissive={hover ? color : "#000000"}
         emissiveIntensity={hover ? 0.5 : 0}
         metalness={0.8}
         roughness={0.2}
