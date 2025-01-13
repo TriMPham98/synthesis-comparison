@@ -40,8 +40,7 @@ export default function App() {
           angle={0.6}
         />
 
-        {/* Ambient light for overall visibility */}
-        <ambientLight intensity={0.2} />
+        <ambientLight intensity={0.5} />
 
         <Stack side="left" position={leftPosition} />
         <Stack side="right" position={rightPosition} />
