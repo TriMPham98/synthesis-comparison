@@ -24,10 +24,16 @@ export function ComparisonOperator({
     return "=";
   };
 
-  // Calculate position between stacks
+  // Calculate vertical position based on right stack position and height
+  const blockHeight = 0.6;
+  const totalRightHeight = rightStack * blockHeight;
+  const rightStackBase = rightPos[1] - totalRightHeight / 2; // Base position of right stack
+  const verticalCenter = rightStackBase + totalRightHeight / 2; // Center of right stack
+
+  // Calculate centered position between stacks
   const position: [number, number, number] = [
-    (leftPos[0] + rightPos[0]) / 2,
-    (Math.max(leftStack, rightStack) * 0.6) / 2,
+    (leftPos[0] + rightPos[0]) / 2, // Center horizontally
+    verticalCenter, // Center vertically relative to right stack's actual position
     0,
   ];
 
