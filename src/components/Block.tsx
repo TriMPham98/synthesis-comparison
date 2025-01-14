@@ -24,7 +24,7 @@ export function Block({
       // Pulse opacity for all blocks when in hover mode
       if (hover && materialRef.current) {
         materialRef.current.opacity =
-          0.5 + Math.sin(state.clock.elapsedTime * 2) * 0.25;
+          0.625 + Math.sin(state.clock.elapsedTime * 2) * 0.125; // Oscillate between 0.5 and 0.75
       }
     }
   });
