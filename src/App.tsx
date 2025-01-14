@@ -46,7 +46,6 @@ export default function App() {
           rotation: [-Math.PI / 2, 0, 0],
         }} // Rotate to look up
         className="w-full h-full"
-        className="w-full h-full"
         shadows>
         <CameraController />
         <SoftShadows />
