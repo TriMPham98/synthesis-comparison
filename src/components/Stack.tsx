@@ -1,6 +1,9 @@
-import { Text } from "@react-three/drei";
+import { Text, useCursor } from "@react-three/drei";
 import { Block } from "./Block";
 import { useComparisonStore } from "../store/comparisonStore";
+import { Plane } from "@react-three/drei";
+import { useState } from "react";
+import { ThreeEvent } from "@react-three/fiber";
 
 interface StackProps {
   side: "left" | "right";
@@ -10,11 +13,24 @@ interface StackProps {
 export function Stack({ side, position }: StackProps) {
   const count = useComparisonStore((state) => state[`${side}Stack`]);
   const mode = useComparisonStore((state) => state.mode);
+  const setStack = useComparisonStore((state) => state.setStack);
 
   // Calculate the middle point for stacking
   const blockHeight = 0.6;
   const totalHeight = count * blockHeight;
   const startY = position[1] - totalHeight / 2;
+
+  // Handle click on the stack
+  const [hovered, setHovered] = useState(false);
+  useCursor(hovered && mode === "addRemove");
+
+  const handleStackClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (mode === "addRemove") {
+      const newCount = Math.min(10, count + 1);
+      setStack(side, newCount);
+    }
+  };
 
   const blocks = Array.from({ length: count }, (_, i) => (
     <Block
@@ -27,13 +43,24 @@ export function Stack({ side, position }: StackProps) {
   // Calculate text position above the stack
   const textPosition: [number, number, number] = [
     position[0],
-    startY + totalHeight + 0.5, // Position above the highest block
+    startY + totalHeight + 0.5,
     position[2],
   ];
 
   return (
     <group>
       {blocks}
+      {/* Invisible clickable plane that extends above the stack */}
+      {mode === "addRemove" && (
+        <Plane
+          args={[1, 5]} // Width and height of the clickable area
+          position={[position[0], position[1], position[2]]}
+          visible={false}
+          onClick={handleStackClick}
+          onPointerOver={() => setHovered(true)}
+          onPointerOut={() => setHovered(false)}
+        />
+      )}
       <Text
         position={textPosition}
         fontSize={0.5}
