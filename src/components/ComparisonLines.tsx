@@ -1,5 +1,5 @@
-import { Line } from '@react-three/drei';
-import { useComparisonStore } from '../store/comparisonStore';
+import { Line } from "@react-three/drei";
+import { useComparisonStore } from "../store/comparisonStore";
 
 interface ComparisonLinesProps {
   leftPos: [number, number, number];
@@ -7,17 +7,18 @@ interface ComparisonLinesProps {
 }
 
 export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
-  const { showAutoLines, studentLines, leftStack, rightStack } = useComparisonStore();
+  const { showAutoLines, studentLines, leftStack, rightStack } =
+    useComparisonStore();
 
   const getLinePoints = (isTop: boolean) => {
     const leftHeight = leftStack * 0.6;
     const rightHeight = rightStack * 0.6;
     const y = isTop ? Math.max(leftHeight, rightHeight) : 0;
-    
+
     return [
-      [leftPos[0], leftPos[1] + y, leftPos[2]],
-      [rightPos[0], rightPos[1] + y, rightPos[2]],
-    ];
+      [leftPos[0], leftPos[1] + y, leftPos[2]] as const,
+      [rightPos[0], rightPos[1] + y, rightPos[2]] as const,
+    ] as const;
   };
 
   return (
