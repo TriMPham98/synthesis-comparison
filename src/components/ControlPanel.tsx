@@ -17,7 +17,7 @@ export function ControlPanel() {
   } = useComparisonStore();
 
   // Function to handle double click for mode switching
-  const handleModeClick = (newMode) => {
+  const handleModeClick = (newMode: "addRemove" | "drawCompare" | "none") => {
     if (mode === newMode) {
       setMode("none"); // If clicked mode is already active, switch to none
     } else {
