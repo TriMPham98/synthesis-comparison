@@ -14,8 +14,8 @@ function CameraController() {
   const mode = useComparisonStore((state) => state.mode);
   const leftStack = useComparisonStore((state) => state.leftStack);
   const rightStack = useComparisonStore((state) => state.rightStack);
-  const lockedPosition = useRef(null);
-  const lockedRotation = useRef(null);
+  const lockedPosition = useRef<THREE.Vector3 | null>(null);
+  const lockedRotation = useRef<THREE.Euler | null>(null);
 
   useFrame(({ camera }) => {
     if (mode === "addRemove") {
@@ -23,8 +23,10 @@ function CameraController() {
         lockedPosition.current = camera.position.clone();
         lockedRotation.current = camera.rotation.clone();
       }
-      camera.position.copy(lockedPosition.current);
-      camera.rotation.copy(lockedRotation.current);
+      if (lockedPosition.current && lockedRotation.current) {
+        camera.position.copy(lockedPosition.current);
+        camera.rotation.copy(lockedRotation.current);
+      }
     } else {
       lockedPosition.current = null;
       lockedRotation.current = null;
