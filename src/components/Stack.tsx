@@ -53,8 +53,13 @@ export function Stack({ side, position }: StackProps) {
       {/* Invisible clickable plane that extends above the stack */}
       {mode === "addRemove" && (
         <Plane
-          args={[1, 5]} // Width and height of the clickable area
-          position={[position[0], position[1], position[2]]}
+          args={[1, totalHeight + 0.6]} // Height covers stack + extra space
+          position={[
+            // Adjusted center position
+            position[0],
+            startY + (totalHeight - 0.6) / 2,
+            position[2],
+          ]}
           visible={false}
           onClick={handleStackClick}
           onPointerOver={() => setHovered(true)}
