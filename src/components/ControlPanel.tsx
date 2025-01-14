@@ -60,19 +60,21 @@ export function ControlPanel() {
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => handleModeClick("addRemove")}
-              onDoubleClick={() => handleModeClick("addRemove")} // Handle double click
-              className={`p-4 rounded-lg ${
+              onDoubleClick={() => handleModeClick("addRemove")}
+              className={`p-4 rounded-lg flex items-center space-x-2 ${
                 mode === "addRemove" ? "bg-cyan-600" : "bg-gray-700"
               }`}>
               <MousePointer2 size={24} />
+              <span>Add/Remove</span>
             </button>
             <button
               onClick={() => handleModeClick("drawCompare")}
-              onDoubleClick={() => handleModeClick("drawCompare")} // Handle double click
-              className={`p-4 rounded-lg ${
+              onDoubleClick={() => handleModeClick("drawCompare")}
+              className={`p-4 rounded-lg flex items-center space-x-2 ${
                 mode === "drawCompare" ? "bg-cyan-600" : "bg-gray-700"
               }`}>
               <Pencil size={24} />
+              <span>Compare</span>
             </button>
           </div>
         </div>
