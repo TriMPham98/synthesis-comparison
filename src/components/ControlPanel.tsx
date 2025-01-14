@@ -16,6 +16,15 @@ export function ControlPanel() {
     setLabelMode,
   } = useComparisonStore();
 
+  // Function to handle double click for mode switching
+  const handleModeClick = (newMode) => {
+    if (mode === newMode) {
+      setMode("none"); // If clicked mode is already active, switch to none
+    } else {
+      setMode(newMode);
+    }
+  };
+
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-gray-900/80 text-white p-6 backdrop-blur-md">
       <div className="max-w-4xl mx-auto grid grid-cols-3 gap-6">
@@ -50,14 +59,16 @@ export function ControlPanel() {
           <h3 className="text-xl font-bold">Mode</h3>
           <div className="flex justify-center space-x-4">
             <button
-              onClick={() => setMode("addRemove")}
+              onClick={() => handleModeClick("addRemove")}
+              onDoubleClick={() => handleModeClick("addRemove")} // Handle double click
               className={`p-4 rounded-lg ${
                 mode === "addRemove" ? "bg-cyan-600" : "bg-gray-700"
               }`}>
               <MousePointer2 size={24} />
             </button>
             <button
-              onClick={() => setMode("drawCompare")}
+              onClick={() => handleModeClick("drawCompare")}
+              onDoubleClick={() => handleModeClick("drawCompare")} // Handle double click
               className={`p-4 rounded-lg ${
                 mode === "drawCompare" ? "bg-cyan-600" : "bg-gray-700"
               }`}>
