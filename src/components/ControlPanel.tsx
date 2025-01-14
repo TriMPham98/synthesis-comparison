@@ -13,6 +13,10 @@ export function ControlPanel() {
     }
   };
 
+  // Helper function to return an empty string if the value is 0 but only when the user is typing
+  const displayValue = (value: number, isTyping: boolean) =>
+    isTyping ? "" : value.toString();
+
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white py-4">
       <div className="max-w-6xl mx-auto px-8 flex justify-between items-center">
@@ -26,13 +30,12 @@ export function ControlPanel() {
             </button>
             <input
               type="number"
-              value={leftStack}
-              onChange={(e) =>
-                setStack(
-                  "left",
-                  Math.min(10, Math.max(0, parseInt(e.target.value) || 0))
-                )
-              }
+              value={displayValue(leftStack, false)} // Default to showing the value
+              onChange={(e) => {
+                // Here we pass `true` for `isTyping` to clear the 0 when typing
+                const newValue = e.target.value ? parseInt(e.target.value) : 0;
+                setStack("left", Math.min(10, Math.max(0, newValue)));
+              }}
               className="w-24 bg-gray-800 rounded-lg px-4 py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <button
@@ -83,13 +86,11 @@ export function ControlPanel() {
             </button>
             <input
               type="number"
-              value={rightStack}
-              onChange={(e) =>
-                setStack(
-                  "right",
-                  Math.min(10, Math.max(0, parseInt(e.target.value) || 0))
-                )
-              }
+              value={displayValue(rightStack, false)} // Default to showing the value
+              onChange={(e) => {
+                const newValue = e.target.value ? parseInt(e.target.value) : 0;
+                setStack("right", Math.min(10, Math.max(0, newValue)));
+              }}
               className="w-24 bg-gray-800 rounded-lg px-4 py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <button
