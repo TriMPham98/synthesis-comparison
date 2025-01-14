@@ -11,29 +11,43 @@ import * as THREE from "three";
 
 function CameraController() {
   const camera = useRef();
+  const mode = useComparisonStore((state) => state.mode);
   const leftStack = useComparisonStore((state) => state.leftStack);
   const rightStack = useComparisonStore((state) => state.rightStack);
+  const lockedPosition = useRef(null);
+  const lockedRotation = useRef(null);
 
   useFrame(({ camera }) => {
-    const maxHeight = Math.max(leftStack, rightStack);
-    const baseDistance = 10;
-    const distancePerBlock = 0.8;
-    const targetDistance = baseDistance + maxHeight * distancePerBlock;
+    if (mode === "addRemove") {
+      if (!lockedPosition.current) {
+        lockedPosition.current = camera.position.clone();
+        lockedRotation.current = camera.rotation.clone();
+      }
+      camera.position.copy(lockedPosition.current);
+      camera.rotation.copy(lockedRotation.current);
+    } else {
+      lockedPosition.current = null;
+      lockedRotation.current = null;
 
-    const currentDistance = camera.position.length();
-    const newDistance = THREE.MathUtils.lerp(
-      currentDistance,
-      targetDistance,
-      0.1
-    );
-
-    camera.position.normalize().multiplyScalar(newDistance);
+      const maxHeight = Math.max(leftStack, rightStack);
+      const baseDistance = 10;
+      const distancePerBlock = 0.8;
+      const targetDistance = baseDistance + maxHeight * distancePerBlock;
+      const currentDistance = camera.position.length();
+      const newDistance = THREE.MathUtils.lerp(
+        currentDistance,
+        targetDistance,
+        0.1
+      );
+      camera.position.normalize().multiplyScalar(newDistance);
+    }
   });
 
   return null;
 }
 
 export default function App() {
+  const mode = useComparisonStore((state) => state.mode);
   const leftPosition: [number, number, number] = [-2, 0, 0];
   const rightPosition: [number, number, number] = [2, 0, 0];
 
@@ -44,36 +58,30 @@ export default function App() {
           position: [0, -10, 0],
           fov: 50,
           rotation: [-Math.PI / 2, 0, 0],
-        }} // Rotate to look up
+        }}
         className="w-full h-full"
         shadows>
         <CameraController />
         <SoftShadows />
         <color attach="background" args={["#111"]} />
 
-        {/* Key light */}
         <directionalLight
           position={[5, 5, 5]}
           intensity={1}
           castShadow
           shadow-mapSize={[1024, 1024]}
         />
-
-        {/* Fill light */}
         <directionalLight
           position={[-5, 3, -5]}
           intensity={0.3}
           color="#00ffff"
         />
-
-        {/* Rim light */}
         <spotLight
           position={[0, 10, -5]}
           intensity={0.5}
           color="#ff00ff"
           angle={0.6}
         />
-
         <ambientLight intensity={0.5} />
 
         <Stack side="left" position={leftPosition} />
@@ -82,6 +90,7 @@ export default function App() {
         <ComparisonOperator leftPos={leftPosition} rightPos={rightPosition} />
 
         <OrbitControls
+          enabled={mode !== "addRemove"}
           enablePan={false}
           minPolarAngle={Math.PI / 4}
           maxPolarAngle={Math.PI / 2}
@@ -91,7 +100,6 @@ export default function App() {
           maxAzimuthAngle={Math.PI / 3}
         />
 
-        {/* Ground plane for shadows */}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, -3.5, 0]}
@@ -100,11 +108,7 @@ export default function App() {
           <meshStandardMaterial color="#111" />
         </mesh>
 
-        {/* Grid Helper */}
-        <gridHelper
-          args={[20, 20, "#444", "#222"]}
-          position={[0, -3.49, 0]} // Adjusted to be 0.01 above the plane
-        />
+        <gridHelper args={[20, 20, "#444", "#222"]} position={[0, -3.49, 0]} />
       </Canvas>
       <ControlPanel />
     </div>
