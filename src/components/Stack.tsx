@@ -28,7 +28,7 @@ export function Stack({ side, position }: StackProps) {
   const blockHeight = 0.6;
   const totalHeight = count * blockHeight;
   const startY = position[1] - totalHeight / 2;
-  const DRAG_THRESHOLD = 0.025; // Reduced threshold for lateral drags
+  const DRAG_THRESHOLD = 0.01; // Reduced threshold for lateral drags
 
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     if (mode === "addRemove") {
@@ -55,8 +55,8 @@ export function Stack({ side, position }: StackProps) {
 
       // Lateral drag (horizontal) detection to trigger removal
       if (
-        deltaX > DRAG_THRESHOLD && // More sensitive to horizontal drag
-        deltaY < DRAG_THRESHOLD && // Prevent vertical movement from triggering removal
+        deltaX > DRAG_THRESHOLD && // More sensitive to horizontal drag (lower threshold)
+        deltaY < DRAG_THRESHOLD && // Ensure minimal vertical movement to trigger removal
         count > 0
       ) {
         setStack(side, count - 1);
