@@ -28,16 +28,10 @@ export function Stack({ side, position }: StackProps) {
   const blockHeight = 0.6;
   const totalHeight = count * blockHeight;
   const startY = position[1] - totalHeight / 2;
-  const DRAG_THRESHOLD = 0.1; // Reduced threshold
+  const DRAG_THRESHOLD = 0.1;
 
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     if (mode === "addRemove") {
-      console.log("Pointer down:", {
-        point: e.point,
-        mode,
-        count,
-      });
-
       e.stopPropagation();
       dragRef.current = {
         isDragging: true,
@@ -49,30 +43,24 @@ export function Stack({ side, position }: StackProps) {
   };
 
   const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
-    if (mode === "addRemove" && dragRef.current.isDragging) {
+    if (
+      mode === "addRemove" &&
+      dragRef.current.isDragging &&
+      !dragRef.current.hasRemoved
+    ) {
       dragRef.current.currentPosition = { x: e.point.x, y: e.point.y };
 
       const deltaY = Math.abs(dragRef.current.startPosition.y - e.point.y);
+      const deltaX = Math.abs(dragRef.current.startPosition.x - e.point.x);
 
-      console.log("Pointer move:", {
-        deltaY,
-        threshold: DRAG_THRESHOLD,
-        isDragging: dragRef.current.isDragging,
-        hasRemoved: dragRef.current.hasRemoved,
-        startY: dragRef.current.startPosition.y,
-        currentY: e.point.y,
-      });
-
-      if (deltaY > DRAG_THRESHOLD && !dragRef.current.hasRemoved) {
-        console.log("Attempting to remove block");
-        setStack(side, Math.max(0, count - 1));
+      if ((deltaY > DRAG_THRESHOLD || deltaX > DRAG_THRESHOLD) && count > 0) {
+        setStack(side, count - 1);
         dragRef.current.hasRemoved = true;
       }
     }
   };
 
   const handlePointerUp = () => {
-    console.log("Pointer up:", dragRef.current);
     dragRef.current.isDragging = false;
     dragRef.current.hasRemoved = false;
   };
