@@ -51,11 +51,23 @@ function CameraController() {
     }
   });
 
-  return null;
+  return (
+    <OrbitControls
+      enabled={mode === "none"}
+      makeDefault
+      target={[0, 0, 0]}
+      enablePan={false}
+      minPolarAngle={Math.PI / 4}
+      maxPolarAngle={Math.PI / 2}
+      minDistance={6}
+      maxDistance={24}
+      minAzimuthAngle={-Math.PI / 3}
+      maxAzimuthAngle={Math.PI / 3}
+    />
+  );
 }
 
 export default function App() {
-  const mode = useComparisonStore((state) => state.mode);
   const leftPosition: [number, number, number] = [-2, 0, 0];
   const rightPosition: [number, number, number] = [2, 0, 0];
 
@@ -95,17 +107,6 @@ export default function App() {
         <Stack side="right" position={rightPosition} />
         <ComparisonLines leftPos={leftPosition} rightPos={rightPosition} />
         <ComparisonOperator leftPos={leftPosition} rightPos={rightPosition} />
-
-        <OrbitControls
-          enabled={mode === "none"}
-          enablePan={false}
-          minPolarAngle={Math.PI / 4}
-          maxPolarAngle={Math.PI / 2}
-          minDistance={6}
-          maxDistance={24}
-          minAzimuthAngle={-Math.PI / 3}
-          maxAzimuthAngle={Math.PI / 3}
-        />
 
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
