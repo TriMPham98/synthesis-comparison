@@ -100,10 +100,10 @@ export function Stack({ side, position }: StackProps) {
       {blocks}
       {mode === "addRemove" && (
         <Plane
-          args={[1, Math.max(totalHeight + 0.6, blockHeight)]}
+          args={[1, Math.max(totalHeight + 0.5, blockHeight)]}
           position={[
             position[0],
-            startY + (totalHeight - 0.6) / 2,
+            startY + (totalHeight - 0.5) / 2,
             position[2],
           ]}
           visible={false}
