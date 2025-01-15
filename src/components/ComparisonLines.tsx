@@ -48,8 +48,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       ] as const;
     } else {
       // For bottom line, align with center of bottom blocks
-      const leftBottomBlockY = leftBaseY + BLOCK_HEIGHT / 2; // Move up by quarter block
-      const rightBottomBlockY = rightBaseY + BLOCK_HEIGHT / 2;
+      const leftBottomBlockY = leftBaseY; // Move up by quarter block
+      const rightBottomBlockY = rightBaseY;
       return [
         [leftX, leftBottomBlockY, leftPos[2]] as const,
         [rightX, rightBottomBlockY, rightPos[2]] as const,
