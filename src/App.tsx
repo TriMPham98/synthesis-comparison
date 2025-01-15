@@ -16,8 +16,14 @@ function CameraController() {
   const lockedPosition = useRef<THREE.Vector3 | null>(null);
   const lockedTarget = useRef<THREE.Vector3 | null>(null);
 
+  const targetPosition = new THREE.Vector3(0, 0, 0);
+
   useFrame(({ camera }) => {
-    if (mode === "drawCompare" || mode === "addRemove") {
+    if (mode === "drawCompare") {
+      const targetCameraPos = new THREE.Vector3(0, 8, 10);
+      camera.position.lerp(targetCameraPos, 0.05);
+      camera.lookAt(targetPosition);
+    } else if (mode === "addRemove") {
       if (!lockedPosition.current) {
         lockedPosition.current = camera.position.clone();
         lockedTarget.current = new THREE.Vector3(0, 0, 0);
@@ -57,9 +63,8 @@ export default function App() {
     <div className="w-full h-screen bg-gray-900">
       <Canvas
         camera={{
-          position: [0, -10, 0],
+          position: [0, 0, 10],
           fov: 50,
-          rotation: [-Math.PI / 2, 0, 0],
         }}
         className="w-full h-full"
         shadows>
