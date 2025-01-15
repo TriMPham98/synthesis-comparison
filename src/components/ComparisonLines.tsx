@@ -27,12 +27,24 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   const getLinePoints = (isTop: boolean) => {
     const leftHeight = leftStack * 0.6;
     const rightHeight = rightStack * 0.6;
-    const y = isTop ? Math.max(leftHeight, rightHeight) : 0;
 
-    return [
-      [leftPos[0], leftPos[1] + y, leftPos[2]] as const,
-      [rightPos[0], rightPos[1] + y, rightPos[2]] as const,
-    ] as const;
+    // Calculate base positions (bottom of stacks)
+    const leftBaseY = leftPos[1] - leftHeight / 2;
+    const rightBaseY = rightPos[1] - rightHeight / 2;
+
+    if (isTop) {
+      // For top line, use the top of the stack
+      return [
+        [leftPos[0], leftBaseY + leftHeight - 0.3, leftPos[2]] as const,
+        [rightPos[0], rightBaseY + rightHeight - 0.3, rightPos[2]] as const,
+      ] as const;
+    } else {
+      // For bottom line, use the bottom of the stack
+      return [
+        [leftPos[0], leftBaseY + 0.3, leftPos[2]] as const,
+        [rightPos[0], rightBaseY + 0.3, rightPos[2]] as const,
+      ] as const;
+    }
   };
 
   const isNearStackPoint = (
@@ -41,8 +53,13 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   ): "top" | "bottom" | null => {
     const stackPos = side === "left" ? leftPos : rightPos;
     const stackHeight = side === "left" ? leftStack : rightStack;
-    const topY = stackPos[1] + stackHeight * 0.6;
-    const bottomY = stackPos[1];
+
+    // Calculate base position (bottom of stack)
+    const baseY = stackPos[1] - (stackHeight * 0.6) / 2;
+
+    // Calculate center points of top and bottom blocks
+    const topY = baseY + stackHeight * 0.6 - 0.3; // Top of stack minus half block height
+    const bottomY = baseY + 0.3; // Bottom of stack plus half block height
 
     // Check if point is near the x-coordinate of the stack
     const xDistance = Math.abs(point.x - stackPos[0]);
