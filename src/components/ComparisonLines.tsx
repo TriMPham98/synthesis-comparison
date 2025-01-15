@@ -32,17 +32,27 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const leftBaseY = leftPos[1] - leftHeight / 2;
     const rightBaseY = rightPos[1] - rightHeight / 2;
 
+    // Adjust x positions to align closer to block edges (blocks are 1 unit wide)
+    const leftX = leftPos[0] + 0.45; // Move to inner edge of left block
+    const rightX = rightPos[0] - 0.45; // Move to inner edge of right block
+
+    const BLOCK_HEIGHT = 0.5;
+
     if (isTop) {
-      // For top line, use the top of the stack
+      // For top line, align with center of top blocks
+      const leftTopBlockY = leftBaseY + leftHeight - BLOCK_HEIGHT; // Move down by half block
+      const rightTopBlockY = rightBaseY + rightHeight - BLOCK_HEIGHT;
       return [
-        [leftPos[0], leftBaseY + leftHeight - 0.3, leftPos[2]] as const,
-        [rightPos[0], rightBaseY + rightHeight - 0.3, rightPos[2]] as const,
+        [leftX, leftTopBlockY, leftPos[2]] as const,
+        [rightX, rightTopBlockY, rightPos[2]] as const,
       ] as const;
     } else {
-      // For bottom line, use the bottom of the stack
+      // For bottom line, align with center of bottom blocks
+      const leftBottomBlockY = leftBaseY + BLOCK_HEIGHT / 2; // Move up by quarter block
+      const rightBottomBlockY = rightBaseY + BLOCK_HEIGHT / 2;
       return [
-        [leftPos[0], leftBaseY + 0.3, leftPos[2]] as const,
-        [rightPos[0], rightBaseY + 0.3, rightPos[2]] as const,
+        [leftX, leftBottomBlockY, leftPos[2]] as const,
+        [rightX, rightBottomBlockY, rightPos[2]] as const,
       ] as const;
     }
   };
@@ -53,13 +63,14 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   ): "top" | "bottom" | null => {
     const stackPos = side === "left" ? leftPos : rightPos;
     const stackHeight = side === "left" ? leftStack : rightStack;
+    const BLOCK_HEIGHT = 0.5;
 
     // Calculate base position (bottom of stack)
     const baseY = stackPos[1] - (stackHeight * 0.6) / 2;
 
     // Calculate center points of top and bottom blocks
-    const topY = baseY + stackHeight * 0.6 - 0.3; // Top of stack minus half block height
-    const bottomY = baseY + 0.3; // Bottom of stack plus half block height
+    const topY = baseY + stackHeight * 0.6 - BLOCK_HEIGHT; // Center of top block
+    const bottomY = baseY + BLOCK_HEIGHT / 2; // Center of bottom block
 
     // Check if point is near the x-coordinate of the stack
     const xDistance = Math.abs(point.x - stackPos[0]);
@@ -151,12 +162,18 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             color="#00ffff"
             lineWidth={2}
             dashed={false}
+            transparent
+            opacity={0.6}
+            toneMapped={false}
           />
           <Line
             points={getLinePoints(false)}
             color="#00ffff"
             lineWidth={2}
             dashed={false}
+            transparent
+            opacity={0.6}
+            toneMapped={false}
           />
         </>
       )}
@@ -166,6 +183,9 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           color="#ff00ff"
           lineWidth={3}
           dashed={false}
+          transparent
+          opacity={0.8}
+          toneMapped={false}
         />
       )}
       {studentLines.bottom && (
@@ -174,6 +194,9 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           color="#ff00ff"
           lineWidth={3}
           dashed={false}
+          transparent
+          opacity={0.8}
+          toneMapped={false}
         />
       )}
       {drawingLine && (
@@ -185,6 +208,9 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           color="#ff00ff"
           lineWidth={3}
           dashed={true}
+          transparent
+          opacity={0.5}
+          toneMapped={false}
         />
       )}
     </group>
