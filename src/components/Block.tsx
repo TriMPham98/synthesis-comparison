@@ -1,30 +1,36 @@
 import { useRef } from "react";
 import { Mesh, MeshStandardMaterial } from "three";
 import { useFrame } from "@react-three/fiber";
+import { useComparisonStore } from "../store/comparisonStore";
 
 interface BlockProps {
   position: [number, number, number];
   color?: string;
   hover?: boolean;
+  isTopOrBottom?: boolean;
 }
 
 export function Block({
   position,
   color = "#46a2da",
   hover = false,
+  isTopOrBottom = false,
 }: BlockProps) {
   const meshRef = useRef<Mesh>(null);
   const materialRef = useRef<MeshStandardMaterial>(null);
+  const mode = useComparisonStore((state) => state.mode);
 
   useFrame((state) => {
-    if (meshRef.current) {
+    if (meshRef.current && materialRef.current) {
       meshRef.current.rotation.x =
         Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
 
-      // Pulse opacity for all blocks when in hover mode
-      if (hover && materialRef.current) {
+      const shouldPulse = hover || (mode === "drawCompare" && isTopOrBottom);
+      if (shouldPulse) {
         materialRef.current.opacity =
-          0.625 + Math.sin(state.clock.elapsedTime * 2) * 0.125; // Oscillate between 0.5 and 0.75
+          0.5 + Math.sin(state.clock.elapsedTime * 2) * 0.25;
+      } else {
+        materialRef.current.opacity = 1;
       }
     }
   });
@@ -36,11 +42,13 @@ export function Block({
         ref={materialRef}
         color={color}
         emissive={color}
-        emissiveIntensity={hover ? 1.0 : 0.5}
+        emissiveIntensity={
+          hover || (mode === "drawCompare" && isTopOrBottom) ? 1.0 : 0.5
+        }
         metalness={0.8}
         roughness={0.2}
-        transparent={true} // Always enable transparency
-        opacity={hover ? 0.75 : 1} // Initial opacity
+        transparent={true}
+        opacity={0.75}
       />
     </mesh>
   );

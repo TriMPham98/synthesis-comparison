@@ -83,13 +83,17 @@ export function Stack({ side, position }: StackProps) {
     position[2],
   ];
 
-  const blocks = Array.from({ length: count }, (_, i) => (
-    <Block
-      key={i}
-      position={[position[0], startY + i * blockHeight, position[2]]}
-      hover={mode === "addRemove"}
-    />
-  ));
+  const blocks = Array.from({ length: count }, (_, i) => {
+    const isTopOrBottom = i === 0 || i === count - 1;
+    return (
+      <Block
+        key={i}
+        position={[position[0], startY + i * blockHeight, position[2]]}
+        hover={mode === "addRemove"}
+        isTopOrBottom={isTopOrBottom}
+      />
+    );
+  });
 
   return (
     <group>
