@@ -20,7 +20,7 @@ function CameraController() {
 
   useFrame(({ camera }) => {
     if (mode === "drawCompare") {
-      const targetCameraPos = new THREE.Vector3(0, 0, 10);
+      const targetCameraPos = new THREE.Vector3(0, 0, 11);
       camera.position.lerp(targetCameraPos, 0.05);
       camera.lookAt(targetPosition);
     } else if (mode === "addRemove") {
