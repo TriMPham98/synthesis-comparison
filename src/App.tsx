@@ -10,26 +10,26 @@ import { useComparisonStore } from "./store/comparisonStore";
 import * as THREE from "three";
 
 function CameraController() {
-  const camera = useRef();
   const mode = useComparisonStore((state) => state.mode);
   const leftStack = useComparisonStore((state) => state.leftStack);
   const rightStack = useComparisonStore((state) => state.rightStack);
   const lockedPosition = useRef<THREE.Vector3 | null>(null);
-  const lockedRotation = useRef<THREE.Euler | null>(null);
+  const lockedTarget = useRef<THREE.Vector3 | null>(null);
 
   useFrame(({ camera }) => {
-    if (mode === "addRemove") {
+    if (mode === "drawCompare" || mode === "addRemove") {
       if (!lockedPosition.current) {
         lockedPosition.current = camera.position.clone();
-        lockedRotation.current = camera.rotation.clone();
+        lockedTarget.current = new THREE.Vector3(0, 0, 0);
       }
-      if (lockedPosition.current && lockedRotation.current) {
+
+      if (lockedPosition.current && lockedTarget.current) {
         camera.position.copy(lockedPosition.current);
-        camera.rotation.copy(lockedRotation.current);
+        camera.lookAt(lockedTarget.current);
       }
     } else {
       lockedPosition.current = null;
-      lockedRotation.current = null;
+      lockedTarget.current = null;
 
       const maxHeight = Math.max(leftStack, rightStack);
       const baseDistance = 10;
@@ -92,7 +92,7 @@ export default function App() {
         <ComparisonOperator leftPos={leftPosition} rightPos={rightPosition} />
 
         <OrbitControls
-          enabled={mode !== "addRemove"}
+          enabled={mode === "none"}
           enablePan={false}
           minPolarAngle={Math.PI / 4}
           maxPolarAngle={Math.PI / 2}
