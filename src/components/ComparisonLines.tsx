@@ -40,8 +40,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
     if (isTop) {
       // For top line, align with center of top blocks
-      const leftTopBlockY = leftBaseY + leftHeight - BLOCK_HEIGHT; // Move down by half block
-      const rightTopBlockY = rightBaseY + rightHeight - BLOCK_HEIGHT;
+      const leftTopBlockY = leftBaseY + leftHeight - 1.25 * BLOCK_HEIGHT;
+      const rightTopBlockY = rightBaseY + rightHeight - 1.25 * BLOCK_HEIGHT;
       return [
         [leftX, leftTopBlockY, leftPos[2]] as const,
         [rightX, rightTopBlockY, rightPos[2]] as const,
