@@ -1,5 +1,4 @@
 import { Text } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Group } from "three";
 import { useComparisonStore } from "../store/comparisonStore";
@@ -36,17 +35,6 @@ export function ComparisonOperator({
     verticalCenter - 0.3, // Center vertically relative to right stack's actual position
     0,
   ];
-
-  useFrame((state) => {
-    if (groupRef.current) {
-      // Add subtle floating animation
-      groupRef.current.position.y =
-        position[1] + Math.sin(state.clock.elapsedTime) * 0.1;
-      // Add subtle rotation
-      groupRef.current.rotation.y =
-        Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-    }
-  });
 
   return (
     <group ref={groupRef} position={position}>
