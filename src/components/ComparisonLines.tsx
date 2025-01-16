@@ -11,8 +11,7 @@ interface ComparisonLinesProps {
 }
 
 export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
-  const { mode, showAutoLines, studentLines, toggleStudentLine } =
-    useComparisonStore();
+  const { mode, studentLines, toggleStudentLine } = useComparisonStore();
   const leftStack = useComparisonStore((state) => state.leftStack);
   const rightStack = useComparisonStore((state) => state.rightStack);
 
@@ -133,28 +132,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         <meshBasicMaterial transparent opacity={0} />
       </Plane>
 
-      {showAutoLines && (
-        <>
-          <Line
-            points={getLinePoints(true)}
-            color="#00ffff"
-            lineWidth={2}
-            dashed={false}
-            transparent
-            opacity={0.6}
-            toneMapped={false}
-          />
-          <Line
-            points={getLinePoints(false)}
-            color="#00ffff"
-            lineWidth={2}
-            dashed={false}
-            transparent
-            opacity={0.6}
-            toneMapped={false}
-          />
-        </>
-      )}
       {studentLines.top && (
         <Line
           points={getLinePoints(true)}
