@@ -79,6 +79,16 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     }
   };
 
+  const getSnapPoint = (
+    side: "left" | "right",
+    position: "top" | "bottom"
+  ): THREE.Vector3 => {
+    const points = getLinePoints(position === "top");
+    const [leftPoint, rightPoint] = points;
+    const point = side === "left" ? leftPoint : rightPoint;
+    return new THREE.Vector3(point[0], point[1], point[2]);
+  };
+
   const isNearStackPoint = (
     point: THREE.Vector3,
     side: "left" | "right"
@@ -120,27 +130,27 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const point = e.point.clone();
 
     if (!drawingLine) {
-      // Check both left and right sides for starting points
       const leftPosition = isNearStackPoint(point, "left");
       const rightPosition = isNearStackPoint(point, "right");
 
       if (leftPosition && !studentLines[leftPosition]) {
+        const snapPoint = getSnapPoint("left", leftPosition);
         setDrawingLine({
-          start: point,
+          start: snapPoint,
           position: leftPosition,
           startSide: "left",
-          currentEnd: point.clone(),
+          currentEnd: snapPoint.clone(),
         });
       } else if (rightPosition && !studentLines[rightPosition]) {
+        const snapPoint = getSnapPoint("right", rightPosition);
         setDrawingLine({
-          start: point,
+          start: snapPoint,
           position: rightPosition,
           startSide: "right",
-          currentEnd: point.clone(),
+          currentEnd: snapPoint.clone(),
         });
       }
     } else {
-      // Check the opposite side for valid end points
       const targetSide = drawingLine.startSide === "left" ? "right" : "left";
       const endPosition = isNearStackPoint(point, targetSide);
 
@@ -156,10 +166,21 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
     if (mode === "drawCompare") {
       if (drawingLine) {
-        setDrawingLine({
-          ...drawingLine,
-          currentEnd: point,
-        });
+        const targetSide = drawingLine.startSide === "left" ? "right" : "left";
+        const hoverPosition = isNearStackPoint(point, targetSide);
+
+        if (hoverPosition === drawingLine.position) {
+          const snapPoint = getSnapPoint(targetSide, hoverPosition);
+          setDrawingLine({
+            ...drawingLine,
+            currentEnd: snapPoint,
+          });
+        } else {
+          setDrawingLine({
+            ...drawingLine,
+            currentEnd: point,
+          });
+        }
       }
 
       const isNearLeft = isNearStackPoint(point, "left");
