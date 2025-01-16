@@ -25,8 +25,9 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   useCursor(hovered && mode === "drawCompare");
 
   const getLinePoints = (isTop: boolean) => {
-    const leftHeight = leftStack * 0.6;
-    const rightHeight = rightStack * 0.6;
+    const BLOCK_HEIGHT = 0.5;
+    const leftHeight = Math.max(leftStack * 0.6, BLOCK_HEIGHT);
+    const rightHeight = Math.max(rightStack * 0.6, BLOCK_HEIGHT);
 
     const leftBaseY = leftPos[1] - leftHeight / 2;
     const rightBaseY = rightPos[1] - rightHeight / 2;
@@ -34,18 +35,50 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const leftX = leftPos[0] + 0.45;
     const rightX = rightPos[0] - 0.45;
 
-    const BLOCK_HEIGHT = 0.5;
-
     if (isTop) {
-      const leftTopBlockY = leftBaseY + leftHeight - 1.25 * BLOCK_HEIGHT;
-      const rightTopBlockY = rightBaseY + rightHeight - 1.25 * BLOCK_HEIGHT;
+      let leftTopBlockY, rightTopBlockY;
+
+      // For zero case, always position at the bottom of where a single block would be
+      if (leftStack === 0) {
+        leftTopBlockY = leftBaseY + BLOCK_HEIGHT / 2;
+      } else {
+        leftTopBlockY = leftBaseY + leftHeight - 1.25 * BLOCK_HEIGHT;
+      }
+
+      if (rightStack === 0) {
+        rightTopBlockY = rightBaseY + BLOCK_HEIGHT / 2;
+      } else {
+        rightTopBlockY = rightBaseY + rightHeight - 1.25 * BLOCK_HEIGHT;
+      }
+
+      // Adjust vertical positioning when comparing to zero
+      if (
+        (leftStack === 0 && rightStack > 0) ||
+        (leftStack > 0 && rightStack === 0)
+      ) {
+        // Move the zero-side point down slightly to avoid line crossing
+        if (leftStack === 0) {
+          leftTopBlockY -= BLOCK_HEIGHT * 0.25;
+        } else {
+          rightTopBlockY -= BLOCK_HEIGHT * 0.25;
+        }
+      }
+
       return [
         [leftX, leftTopBlockY, leftPos[2]] as const,
         [rightX, rightTopBlockY, rightPos[2]] as const,
       ] as const;
     } else {
-      const leftBottomBlockY = leftBaseY;
-      const rightBottomBlockY = rightBaseY;
+      // Bottom line points
+      const leftBottomBlockY =
+        leftStack === 0
+          ? leftBaseY - BLOCK_HEIGHT * 0.25 // Shift down slightly for zero case
+          : leftBaseY;
+      const rightBottomBlockY =
+        rightStack === 0
+          ? rightBaseY - BLOCK_HEIGHT * 0.25 // Shift down slightly for zero case
+          : rightBaseY;
+
       return [
         [leftX, leftBottomBlockY, leftPos[2]] as const,
         [rightX, rightBottomBlockY, rightPos[2]] as const,
@@ -58,41 +91,55 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     side: "left" | "right"
   ): "top" | "bottom" | null => {
     const stackPos = side === "left" ? leftPos : rightPos;
-    const stackHeight = side === "left" ? leftStack : rightStack;
+    const stackCount = side === "left" ? leftStack : rightStack;
     const BLOCK_HEIGHT = 0.5;
 
-    const baseY = stackPos[1] - (stackHeight * 0.6) / 2;
-    const topY = baseY + stackHeight * 0.6 - BLOCK_HEIGHT;
+    // Handle empty stack case
+    if (stackCount === 0) {
+      const baseY = stackPos[1] - BLOCK_HEIGHT * 0.75; // Adjusted base position for zero
+      const singlePointY = baseY + BLOCK_HEIGHT / 2;
+
+      const xDistance = Math.abs(point.x - stackPos[0]);
+      if (xDistance > 0.5) return null;
+
+      const distanceThreshold = 0.3;
+      if (Math.abs(point.y - singlePointY) < distanceThreshold) return "top";
+      if (Math.abs(point.y - baseY) < distanceThreshold) return "bottom";
+      return null;
+    }
+
+    // Original logic for non-empty stacks
+    const stackHeight = stackCount * 0.6;
+    const baseY = stackPos[1] - stackHeight / 2;
+    const topY = baseY + stackHeight - BLOCK_HEIGHT;
     const bottomY = baseY + BLOCK_HEIGHT / 2;
 
     const xDistance = Math.abs(point.x - stackPos[0]);
     if (xDistance > 0.5) return null;
 
     const distanceThreshold = 0.3;
-
     if (Math.abs(point.y - topY) < distanceThreshold) return "top";
     if (Math.abs(point.y - bottomY) < distanceThreshold) return "bottom";
     return null;
   };
 
+  // Rest of the component remains unchanged...
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     if (mode !== "drawCompare") return;
 
     const point = e.point.clone();
 
     if (!drawingLine) {
-      // Starting a new line
       const position = isNearStackPoint(point, "left");
 
       if (position && !studentLines[position]) {
         setDrawingLine({
           start: point,
           position,
-          currentEnd: point.clone(), // Initialize end point as start point
+          currentEnd: point.clone(),
         });
       }
     } else {
-      // Completing a line
       const endPosition = isNearStackPoint(point, "right");
 
       if (endPosition === drawingLine.position) {
@@ -106,7 +153,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const point = e.point.clone();
 
     if (mode === "drawCompare") {
-      // Update line end point while drawing
       if (drawingLine) {
         setDrawingLine({
           ...drawingLine,
@@ -114,7 +160,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         });
       }
 
-      // Update hover state
       const isNearLeft = isNearStackPoint(point, "left");
       const isNearRight = isNearStackPoint(point, "right");
       setHovered(!!isNearLeft || !!isNearRight);
@@ -167,8 +212,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           color="#ff00ff"
           lineWidth={3}
           dashed={true}
-          dashSize={0.1} // Added smaller dash size
-          gapSize={0.1} // Added matching gap size for even spacing
+          dashSize={0.1}
+          gapSize={0.1}
           transparent
           opacity={0.5}
           toneMapped={false}
