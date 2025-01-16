@@ -18,6 +18,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   const [drawingLine, setDrawingLine] = useState<{
     start: THREE.Vector3;
     position: "top" | "bottom";
+    startSide: "left" | "right";
     currentEnd: THREE.Vector3;
   } | null>(null);
   const [hovered, setHovered] = useState(false);
@@ -38,7 +39,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     if (isTop) {
       let leftTopBlockY, rightTopBlockY;
 
-      // For zero case, always position at the bottom of where a single block would be
       if (leftStack === 0) {
         leftTopBlockY = leftBaseY + BLOCK_HEIGHT / 2;
       } else {
@@ -51,12 +51,10 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         rightTopBlockY = rightBaseY + rightHeight - 1.25 * BLOCK_HEIGHT;
       }
 
-      // Adjust vertical positioning when comparing to zero
       if (
         (leftStack === 0 && rightStack > 0) ||
         (leftStack > 0 && rightStack === 0)
       ) {
-        // Move the zero-side point down slightly to avoid line crossing
         if (leftStack === 0) {
           leftTopBlockY -= BLOCK_HEIGHT * 0.25;
         } else {
@@ -69,15 +67,10 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         [rightX, rightTopBlockY, rightPos[2]] as const,
       ] as const;
     } else {
-      // Bottom line points
       const leftBottomBlockY =
-        leftStack === 0
-          ? leftBaseY - BLOCK_HEIGHT * 0.25 // Shift down slightly for zero case
-          : leftBaseY;
+        leftStack === 0 ? leftBaseY - BLOCK_HEIGHT * 0.25 : leftBaseY;
       const rightBottomBlockY =
-        rightStack === 0
-          ? rightBaseY - BLOCK_HEIGHT * 0.25 // Shift down slightly for zero case
-          : rightBaseY;
+        rightStack === 0 ? rightBaseY - BLOCK_HEIGHT * 0.25 : rightBaseY;
 
       return [
         [leftX, leftBottomBlockY, leftPos[2]] as const,
@@ -94,9 +87,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const stackCount = side === "left" ? leftStack : rightStack;
     const BLOCK_HEIGHT = 0.5;
 
-    // Handle empty stack case
     if (stackCount === 0) {
-      const baseY = stackPos[1] - BLOCK_HEIGHT * 0.75; // Adjusted base position for zero
+      const baseY = stackPos[1] - BLOCK_HEIGHT * 0.75;
       const singlePointY = baseY + BLOCK_HEIGHT / 2;
 
       const xDistance = Math.abs(point.x - stackPos[0]);
@@ -108,7 +100,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       return null;
     }
 
-    // Original logic for non-empty stacks
     const stackHeight = stackCount * 0.6;
     const baseY = stackPos[1] - stackHeight / 2;
     const topY = baseY + stackHeight - BLOCK_HEIGHT;
@@ -123,24 +114,35 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     return null;
   };
 
-  // Rest of the component remains unchanged...
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     if (mode !== "drawCompare") return;
 
     const point = e.point.clone();
 
     if (!drawingLine) {
-      const position = isNearStackPoint(point, "left");
+      // Check both left and right sides for starting points
+      const leftPosition = isNearStackPoint(point, "left");
+      const rightPosition = isNearStackPoint(point, "right");
 
-      if (position && !studentLines[position]) {
+      if (leftPosition && !studentLines[leftPosition]) {
         setDrawingLine({
           start: point,
-          position,
+          position: leftPosition,
+          startSide: "left",
+          currentEnd: point.clone(),
+        });
+      } else if (rightPosition && !studentLines[rightPosition]) {
+        setDrawingLine({
+          start: point,
+          position: rightPosition,
+          startSide: "right",
           currentEnd: point.clone(),
         });
       }
     } else {
-      const endPosition = isNearStackPoint(point, "right");
+      // Check the opposite side for valid end points
+      const targetSide = drawingLine.startSide === "left" ? "right" : "left";
+      const endPosition = isNearStackPoint(point, targetSide);
 
       if (endPosition === drawingLine.position) {
         toggleStudentLine(drawingLine.position);
