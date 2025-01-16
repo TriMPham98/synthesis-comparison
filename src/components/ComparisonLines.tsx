@@ -19,6 +19,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   const [drawingLine, setDrawingLine] = useState<{
     start: THREE.Vector3;
     position: "top" | "bottom";
+    currentEnd: THREE.Vector3;
   } | null>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -28,18 +29,15 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const leftHeight = leftStack * 0.6;
     const rightHeight = rightStack * 0.6;
 
-    // Calculate base positions (bottom of stacks)
     const leftBaseY = leftPos[1] - leftHeight / 2;
     const rightBaseY = rightPos[1] - rightHeight / 2;
 
-    // Adjust x positions to align closer to block edges (blocks are 1 unit wide)
-    const leftX = leftPos[0] + 0.45; // Move to inner edge of left block
-    const rightX = rightPos[0] - 0.45; // Move to inner edge of right block
+    const leftX = leftPos[0] + 0.45;
+    const rightX = rightPos[0] - 0.45;
 
     const BLOCK_HEIGHT = 0.5;
 
     if (isTop) {
-      // For top line, align with center of top blocks
       const leftTopBlockY = leftBaseY + leftHeight - 1.25 * BLOCK_HEIGHT;
       const rightTopBlockY = rightBaseY + rightHeight - 1.25 * BLOCK_HEIGHT;
       return [
@@ -47,7 +45,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         [rightX, rightTopBlockY, rightPos[2]] as const,
       ] as const;
     } else {
-      // For bottom line, align with center of bottom blocks
       const leftBottomBlockY = leftBaseY;
       const rightBottomBlockY = rightBaseY;
       return [
@@ -65,14 +62,10 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const stackHeight = side === "left" ? leftStack : rightStack;
     const BLOCK_HEIGHT = 0.5;
 
-    // Calculate base position (bottom of stack)
     const baseY = stackPos[1] - (stackHeight * 0.6) / 2;
+    const topY = baseY + stackHeight * 0.6 - BLOCK_HEIGHT;
+    const bottomY = baseY + BLOCK_HEIGHT / 2;
 
-    // Calculate center points of top and bottom blocks
-    const topY = baseY + stackHeight * 0.6 - BLOCK_HEIGHT; // Center of top block
-    const bottomY = baseY + BLOCK_HEIGHT / 2; // Center of bottom block
-
-    // Check if point is near the x-coordinate of the stack
     const xDistance = Math.abs(point.x - stackPos[0]);
     if (xDistance > 0.5) return null;
 
@@ -84,63 +77,48 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   };
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
-    if (mode !== "drawCompare") {
-      console.log("Click ignored - not in compare mode");
-      return;
-    }
+    if (mode !== "drawCompare") return;
 
     const point = e.point.clone();
-    console.log("Click detected at:", point);
 
     if (!drawingLine) {
       // Starting a new line
       const position = isNearStackPoint(point, "left");
-      console.log("Checking left stack point:", position);
 
       if (position && !studentLines[position]) {
-        console.log("Starting line at position:", position);
-        setDrawingLine({ start: point, position });
-      } else {
-        console.log("Invalid start position:", {
+        setDrawingLine({
+          start: point,
           position,
-          existingLine: position ? studentLines[position] : null,
+          currentEnd: point.clone(), // Initialize end point as start point
         });
       }
     } else {
       // Completing a line
       const endPosition = isNearStackPoint(point, "right");
-      console.log("Checking end position:", endPosition);
 
       if (endPosition === drawingLine.position) {
-        console.log("Completing line at position:", endPosition);
         toggleStudentLine(drawingLine.position);
-      } else {
-        console.log("Invalid end position:", {
-          expected: drawingLine.position,
-          got: endPosition,
-        });
       }
       setDrawingLine(null);
     }
   };
 
   const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
-    if (mode === "drawCompare") {
-      const point = e.point.clone();
-      const isNearLeft = isNearStackPoint(point, "left");
-      const isNearRight = isNearStackPoint(point, "right");
-      const wasHovered = hovered;
-      const newHovered = !!isNearLeft || !!isNearRight;
+    const point = e.point.clone();
 
-      if (wasHovered !== newHovered) {
-        console.log("Hover state changed:", {
-          nearLeft: isNearLeft,
-          nearRight: isNearRight,
-          hovered: newHovered,
+    if (mode === "drawCompare") {
+      // Update line end point while drawing
+      if (drawingLine) {
+        setDrawingLine({
+          ...drawingLine,
+          currentEnd: point,
         });
       }
 
-      setHovered(newHovered);
+      // Update hover state
+      const isNearLeft = isNearStackPoint(point, "left");
+      const isNearRight = isNearStackPoint(point, "right");
+      setHovered(!!isNearLeft || !!isNearRight);
     }
   };
 
@@ -203,7 +181,11 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         <Line
           points={[
             [drawingLine.start.x, drawingLine.start.y, drawingLine.start.z],
-            getLinePoints(drawingLine.position === "top")[1],
+            [
+              drawingLine.currentEnd.x,
+              drawingLine.currentEnd.y,
+              drawingLine.currentEnd.z,
+            ],
           ]}
           color="#ff00ff"
           lineWidth={3}
