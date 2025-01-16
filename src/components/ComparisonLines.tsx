@@ -104,7 +104,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       const xDistance = Math.abs(point.x - stackPos[0]);
       if (xDistance > 0.5) return null;
 
-      const distanceThreshold = 0.3;
+      const distanceThreshold = 15;
       if (Math.abs(point.y - singlePointY) < distanceThreshold) return "top";
       if (Math.abs(point.y - baseY) < distanceThreshold) return "bottom";
       return null;
