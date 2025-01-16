@@ -190,6 +190,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           color="#ff00ff"
           lineWidth={3}
           dashed={true}
+          dashSize={0.1} // Added smaller dash size
+          gapSize={0.1} // Added matching gap size for even spacing
           transparent
           opacity={0.5}
           toneMapped={false}
