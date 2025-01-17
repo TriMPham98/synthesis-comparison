@@ -299,10 +299,12 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           !studentLines.bottom && isNearStackPoint(point, "right", "bottom");
 
         setHovered(
-          leftTopPosition ||
+          !!(
+            leftTopPosition ||
             leftBottomPosition ||
             rightTopPosition ||
             rightBottomPosition
+          )
         );
       }
     }
