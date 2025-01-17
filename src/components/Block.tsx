@@ -8,6 +8,7 @@ interface BlockProps {
   color?: string;
   hover?: boolean;
   isTopOrBottom?: boolean;
+  isTop?: boolean;
 }
 
 export function Block({
@@ -15,17 +16,25 @@ export function Block({
   color = "#46a2da",
   hover = false,
   isTopOrBottom = false,
+  isTop = false,
 }: BlockProps) {
   const meshRef = useRef<Mesh>(null);
   const materialRef = useRef<MeshStandardMaterial>(null);
   const mode = useComparisonStore((state) => state.mode);
+  const studentLines = useComparisonStore((state) => state.studentLines);
+
+  const isAvailableForLines =
+    mode === "drawCompare" &&
+    isTopOrBottom &&
+    ((isTop && !studentLines.top) || (!isTop && !studentLines.bottom));
 
   useFrame((state) => {
     if (meshRef.current && materialRef.current) {
       meshRef.current.rotation.x =
         Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
 
-      const shouldPulse = hover || (mode === "drawCompare" && isTopOrBottom);
+      const shouldPulse = hover || isAvailableForLines;
+
       if (shouldPulse) {
         materialRef.current.opacity =
           0.5 + Math.sin(state.clock.elapsedTime * 2) * 0.25;
@@ -42,9 +51,7 @@ export function Block({
         ref={materialRef}
         color={color}
         emissive={color}
-        emissiveIntensity={
-          hover || (mode === "drawCompare" && isTopOrBottom) ? 1.0 : 0.5
-        }
+        emissiveIntensity={hover || isAvailableForLines ? 1.0 : 0.5}
         metalness={0.8}
         roughness={0.2}
         transparent={true}

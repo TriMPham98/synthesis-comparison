@@ -408,21 +408,25 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             currentEnd: point,
           });
         }
+      } else {
+        const leftPosition = isNearStackPoint(point, "left");
+        const rightPosition = isNearStackPoint(point, "right");
+
+        const preferredPosition = leftPosition || rightPosition;
+
+        const finalLeftPosition = preferredPosition
+          ? isNearStackPoint(point, "left", studentLines.top ? "bottom" : "top")
+          : leftPosition;
+        const finalRightPosition = preferredPosition
+          ? isNearStackPoint(
+              point,
+              "right",
+              studentLines.top ? "bottom" : "top"
+            )
+          : rightPosition;
+
+        setHovered(!!finalLeftPosition || !!finalRightPosition);
       }
-
-      const leftPosition = isNearStackPoint(point, "left");
-      const rightPosition = isNearStackPoint(point, "right");
-
-      const preferredPosition = leftPosition || rightPosition;
-
-      const finalLeftPosition = preferredPosition
-        ? isNearStackPoint(point, "left", preferredPosition)
-        : leftPosition;
-      const finalRightPosition = preferredPosition
-        ? isNearStackPoint(point, "right", preferredPosition)
-        : rightPosition;
-
-      setHovered(!!finalLeftPosition || !!finalRightPosition);
     }
   };
 
