@@ -37,40 +37,19 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const rightX = rightPos[0] - 0.45;
 
     if (isTop) {
-      let leftTopBlockY, rightTopBlockY;
+      const leftTopEdge = leftBaseY + leftHeight;
+      const rightTopEdge = rightBaseY + rightHeight;
 
-      if (leftStack === 0) {
-        leftTopBlockY = leftBaseY + BLOCK_HEIGHT / 2;
-      } else {
-        leftTopBlockY = leftBaseY + leftHeight - 1.25 * BLOCK_HEIGHT;
-      }
-
-      if (rightStack === 0) {
-        rightTopBlockY = rightBaseY + BLOCK_HEIGHT / 2;
-      } else {
-        rightTopBlockY = rightBaseY + rightHeight - 1.25 * BLOCK_HEIGHT;
-      }
-
-      if (
-        (leftStack === 0 && rightStack > 0) ||
-        (leftStack > 0 && rightStack === 0)
-      ) {
-        if (leftStack === 0) {
-          leftTopBlockY -= BLOCK_HEIGHT * 0.25;
-        } else {
-          rightTopBlockY -= BLOCK_HEIGHT * 0.25;
-        }
-      }
+      const leftTopBlockY = leftTopEdge - BLOCK_HEIGHT * 0.8;
+      const rightTopBlockY = rightTopEdge - BLOCK_HEIGHT * 0.8;
 
       return [
         [leftX, leftTopBlockY, leftPos[2]] as const,
         [rightX, rightTopBlockY, rightPos[2]] as const,
       ] as const;
     } else {
-      const leftBottomBlockY =
-        leftStack === 0 ? leftBaseY - BLOCK_HEIGHT * 0.25 : leftBaseY;
-      const rightBottomBlockY =
-        rightStack === 0 ? rightBaseY - BLOCK_HEIGHT * 0.25 : rightBaseY;
+      const leftBottomBlockY = leftBaseY - BLOCK_HEIGHT * 0.2;
+      const rightBottomBlockY = rightBaseY - BLOCK_HEIGHT * 0.2;
 
       return [
         [leftX, leftBottomBlockY, leftPos[2]] as const,
@@ -250,10 +229,10 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         <Line
           points={getLinePoints(true)}
           color="#ff00ff"
-          lineWidth={2}
+          lineWidth={3}
           dashed={false}
           transparent
-          opacity={0.8}
+          opacity={1}
           toneMapped={false}
           position={[0, 0.05, 0]}
         />
@@ -262,12 +241,12 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         <Line
           points={getLinePoints(false)}
           color="#ff00ff"
-          lineWidth={2}
+          lineWidth={3}
           dashed={false}
           transparent
-          opacity={0.8}
+          opacity={1}
           toneMapped={false}
-          position={[0, -0.05, 0]}
+          position={[0, -0.15, 0]}
         />
       )}
       {drawingLine && (
