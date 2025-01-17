@@ -75,7 +75,7 @@ export function ControlPanel() {
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => handleModeClick("addRemove")}
-              className={`px-6 py-3 rounded-lg flex items-center space-x-2 ${
+              className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center ${
                 mode === "addRemove" ? "bg-blue-600" : "bg-gray-700"
               }`}>
               <MousePointer2 size={24} />
@@ -83,7 +83,7 @@ export function ControlPanel() {
             </button>
             <button
               onClick={() => handleModeClick("drawCompare")}
-              className={`px-6 py-3 rounded-lg flex items-center space-x-2 ${
+              className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center ${
                 mode === "drawCompare" ? "bg-blue-600" : "bg-gray-700"
               }`}>
               <Pencil size={24} />
@@ -91,7 +91,7 @@ export function ControlPanel() {
             </button>
             <button
               onClick={toggleAutoLines}
-              className={`px-6 py-3 rounded-lg flex items-center space-x-2 ${
+              className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center ${
                 showAutoLines ? "bg-blue-600" : "bg-gray-700"
               }`}>
               <Eye size={24} />
@@ -100,7 +100,7 @@ export function ControlPanel() {
             <button
               onClick={handleAnimateClick}
               disabled={!studentLines.top || !studentLines.bottom}
-              className={`px-6 py-3 rounded-lg flex items-center space-x-2 
+              className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center
                 ${
                   !studentLines.top || !studentLines.bottom
                     ? "bg-gray-600 cursor-not-allowed"
