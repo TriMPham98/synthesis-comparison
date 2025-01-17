@@ -43,11 +43,9 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       const bottomOffset = -0.55;
 
       if (!convergencePointRef.current) {
-        convergencePointRef.current = [
-          rightX,
-          isTop ? topOffset : bottomOffset,
-          rightPos[2],
-        ];
+        const convergenceX = rightX + 0.3;
+        const convergenceY = -0.3;
+        convergencePointRef.current = [convergenceX, convergenceY, rightPos[2]];
       }
 
       return [
