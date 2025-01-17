@@ -32,12 +32,20 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   const [hovered, setHovered] = useState(false);
 
   const convergencePointRef = useRef<[number, number, number] | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useCursor(hovered && mode === "drawCompare");
+
+  useEffect(() => {
+    audioRef.current = new Audio("/sounds/correctCompare.mp3");
+  }, []);
 
   useFrame((_, delta) => {
     if (isAnimating) {
       setAnimationProgress(Math.min(1, animationProgress + delta));
+      if (animationProgress + delta >= 1) {
+        audioRef.current?.play();
+      }
     } else {
       setAnimationProgress(0);
     }
