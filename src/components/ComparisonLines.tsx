@@ -12,7 +12,8 @@ interface ComparisonLinesProps {
 }
 
 export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
-  const { mode, studentLines, isAnimating, setStudentLine } = useComparisonStore();
+  const { mode, studentLines, isAnimating, setStudentLine } =
+    useComparisonStore();
   const animationProgress = useComparisonStore(
     (state) => state.animationProgress
   );
@@ -36,7 +37,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
   useFrame((_, delta) => {
     if (isAnimating) {
-      setAnimationProgress((prev) => Math.min(1, prev + delta));
+      setAnimationProgress(Math.min(1, animationProgress + delta));
     } else {
       setAnimationProgress(0);
     }
