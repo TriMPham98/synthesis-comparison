@@ -25,10 +25,8 @@ export function ControlPanel() {
 
   const handleModeClick = (newMode: "addRemove" | "drawCompare" | "none") => {
     if (mode === newMode) {
-      console.log("Disabling mode:", mode);
       setMode("none");
     } else {
-      console.log("Enabling mode:", newMode);
       setMode(newMode);
     }
   };
