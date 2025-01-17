@@ -207,26 +207,38 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     if (studentLines.top && studentLines.bottom) return;
 
     const point = e.point.clone();
-    const position = studentLines.top ? "bottom" : "top";
 
     if (!drawingLine) {
-      const leftPosition = isNearStackPoint(point, "left", position, true);
-      const rightPosition = isNearStackPoint(point, "right", position, true);
+      // Check both positions to see which one was clicked
+      const leftTopPosition =
+        !studentLines.top && isNearStackPoint(point, "left", "top", true);
+      const leftBottomPosition =
+        !studentLines.bottom && isNearStackPoint(point, "left", "bottom", true);
+      const rightTopPosition =
+        !studentLines.top && isNearStackPoint(point, "right", "top", true);
+      const rightBottomPosition =
+        !studentLines.bottom &&
+        isNearStackPoint(point, "right", "bottom", true);
 
-      if (leftPosition) {
-        const snapPoint = getSnapPoint("left", position);
+      // Determine which position was clicked
+      if (leftTopPosition || rightTopPosition) {
+        const position = "top";
+        const side = leftTopPosition ? "left" : "right";
+        const snapPoint = getSnapPoint(side, position);
         setDrawingLine({
           start: snapPoint,
-          position: position,
-          startSide: "left",
+          position,
+          startSide: side,
           currentEnd: snapPoint.clone(),
         });
-      } else if (rightPosition) {
-        const snapPoint = getSnapPoint("right", position);
+      } else if (leftBottomPosition || rightBottomPosition) {
+        const position = "bottom";
+        const side = leftBottomPosition ? "left" : "right";
+        const snapPoint = getSnapPoint(side, position);
         setDrawingLine({
           start: snapPoint,
-          position: position,
-          startSide: "right",
+          position,
+          startSide: side,
           currentEnd: snapPoint.clone(),
         });
       }
@@ -276,23 +288,22 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           });
         }
       } else {
-        const leftPosition = isNearStackPoint(point, "left");
-        const rightPosition = isNearStackPoint(point, "right");
+        // Check both available positions for hover state
+        const leftTopPosition =
+          !studentLines.top && isNearStackPoint(point, "left", "top");
+        const leftBottomPosition =
+          !studentLines.bottom && isNearStackPoint(point, "left", "bottom");
+        const rightTopPosition =
+          !studentLines.top && isNearStackPoint(point, "right", "top");
+        const rightBottomPosition =
+          !studentLines.bottom && isNearStackPoint(point, "right", "bottom");
 
-        const preferredPosition = leftPosition || rightPosition;
-
-        const finalLeftPosition = preferredPosition
-          ? isNearStackPoint(point, "left", studentLines.top ? "bottom" : "top")
-          : leftPosition;
-        const finalRightPosition = preferredPosition
-          ? isNearStackPoint(
-              point,
-              "right",
-              studentLines.top ? "bottom" : "top"
-            )
-          : rightPosition;
-
-        setHovered(!!finalLeftPosition || !!finalRightPosition);
+        setHovered(
+          leftTopPosition ||
+            leftBottomPosition ||
+            rightTopPosition ||
+            rightBottomPosition
+        );
       }
     }
   };
