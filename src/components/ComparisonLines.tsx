@@ -38,6 +38,10 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const leftX = leftPos[0] + 0.45;
     const rightX = rightPos[0] - 0.45;
 
+    if (leftStack !== 0 && rightStack !== 0) {
+      convergencePointRef.current = null;
+    }
+
     if (leftStack === 0 && rightStack === 0) {
       const topOffset = -0.05;
       const bottomOffset = -0.55;
@@ -49,9 +53,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     }
 
     if (rightStack === 0) {
-      const topOffset = -0.05;
-      const bottomOffset = -0.55;
-
       if (!convergencePointRef.current) {
         const convergenceX = rightX + 0.3;
         const convergenceY = -0.3;
@@ -59,15 +60,12 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       }
 
       return [
-        [leftX, isTop ? topOffset : bottomOffset, leftPos[2]],
+        [leftX, isTop ? leftBaseY + leftHeight - BLOCK_HEIGHT * 0.7 : leftBaseY, leftPos[2]],
         convergencePointRef.current,
       ] as const;
     }
 
     if (leftStack === 0) {
-      const topOffset = -0.05;
-      const bottomOffset = -0.55;
-
       if (!convergencePointRef.current) {
         const convergenceX = leftX - 0.3;
         const convergenceY = -0.3;
@@ -76,11 +74,9 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
       return [
         convergencePointRef.current,
-        [rightX, isTop ? topOffset : bottomOffset, rightPos[2]],
+        [rightX, isTop ? rightBaseY + rightHeight - BLOCK_HEIGHT * 0.7 : rightBaseY, rightPos[2]],
       ] as const;
     }
-
-    convergencePointRef.current = null;
 
     if (isTop) {
       const leftTopEdge = leftBaseY + leftHeight;
@@ -94,12 +90,9 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         [rightX, rightTopBlockY, rightPos[2]],
       ] as const;
     } else {
-      const leftBottomBlockY = leftBaseY - BLOCK_HEIGHT * 0.5;
-      const rightBottomBlockY = rightBaseY - BLOCK_HEIGHT * 0.5;
-
       return [
-        [leftX, leftBottomBlockY, leftPos[2]],
-        [rightX, rightBottomBlockY, rightPos[2]],
+        [leftX, leftBaseY, leftPos[2]],
+        [rightX, rightBaseY, rightPos[2]],
       ] as const;
     }
   };
@@ -415,10 +408,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   };
 
   useEffect(() => {
-    if (!studentLines.top && !studentLines.bottom) {
-      convergencePointRef.current = null;
-    }
-  }, [studentLines]);
+    convergencePointRef.current = null;
+  }, [leftStack, rightStack]);
 
   useEffect(() => {
     const BLOCK_HEIGHT = 0.5;
