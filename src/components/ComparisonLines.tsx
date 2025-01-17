@@ -91,22 +91,32 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
   const isNearStackPoint = (
     point: THREE.Vector3,
-    side: "left" | "right"
+    side: "left" | "right",
+    preferredPosition?: "top" | "bottom"
   ): "top" | "bottom" | null => {
     const stackPos = side === "left" ? leftPos : rightPos;
     const stackCount = side === "left" ? leftStack : rightStack;
     const BLOCK_HEIGHT = 0.5;
 
+    const xDistance = Math.abs(point.x - stackPos[0]);
+    if (xDistance > 0.5) return null;
+
+    const Y_THRESHOLD = 0.5;
+
     if (stackCount === 0) {
       const baseY = stackPos[1] - BLOCK_HEIGHT * 0.75;
       const singlePointY = baseY + BLOCK_HEIGHT / 2;
 
-      const xDistance = Math.abs(point.x - stackPos[0]);
-      if (xDistance > 0.5) return null;
+      const topDistance = Math.abs(point.y - singlePointY);
+      const bottomDistance = Math.abs(point.y - baseY);
 
-      const distanceThreshold = 15;
-      if (Math.abs(point.y - singlePointY) < distanceThreshold) return "top";
-      if (Math.abs(point.y - baseY) < distanceThreshold) return "bottom";
+      if (preferredPosition === "top" && topDistance < Y_THRESHOLD)
+        return "top";
+      if (preferredPosition === "bottom" && bottomDistance < Y_THRESHOLD)
+        return "bottom";
+
+      if (topDistance < Y_THRESHOLD) return "top";
+      if (bottomDistance < Y_THRESHOLD) return "bottom";
       return null;
     }
 
@@ -115,12 +125,15 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const topY = baseY + stackHeight - BLOCK_HEIGHT;
     const bottomY = baseY + BLOCK_HEIGHT / 2;
 
-    const xDistance = Math.abs(point.x - stackPos[0]);
-    if (xDistance > 0.5) return null;
+    const topDistance = Math.abs(point.y - topY);
+    const bottomDistance = Math.abs(point.y - bottomY);
 
-    const distanceThreshold = 0.3;
-    if (Math.abs(point.y - topY) < distanceThreshold) return "top";
-    if (Math.abs(point.y - bottomY) < distanceThreshold) return "bottom";
+    if (preferredPosition === "top" && topDistance < Y_THRESHOLD) return "top";
+    if (preferredPosition === "bottom" && bottomDistance < Y_THRESHOLD)
+      return "bottom";
+
+    if (topDistance < Y_THRESHOLD) return "top";
+    if (bottomDistance < Y_THRESHOLD) return "bottom";
     return null;
   };
 
@@ -128,10 +141,21 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     if (mode !== "drawCompare") return;
 
     const point = e.point.clone();
+    console.log("Click detected:", {
+      point: { x: point.x, y: point.y, z: point.z },
+      mode,
+      drawingLine: !!drawingLine,
+    });
 
     if (!drawingLine) {
       const leftPosition = isNearStackPoint(point, "left");
       const rightPosition = isNearStackPoint(point, "right");
+
+      console.log("Snap check results:", {
+        leftPosition,
+        rightPosition,
+        studentLines,
+      });
 
       if (leftPosition && !studentLines[leftPosition]) {
         const snapPoint = getSnapPoint("left", leftPosition);
@@ -152,9 +176,24 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       }
     } else {
       const targetSide = drawingLine.startSide === "left" ? "right" : "left";
-      const endPosition = isNearStackPoint(point, targetSide);
+      const endPosition = isNearStackPoint(
+        point,
+        targetSide,
+        drawingLine.position
+      );
+
+      console.log("Attempting to complete line:", {
+        targetSide,
+        endPosition,
+        drawingLinePosition: drawingLine.position,
+        point: { x: point.x, y: point.y, z: point.z },
+      });
 
       if (endPosition === drawingLine.position) {
+        console.log("Completing line:", {
+          position: drawingLine.position,
+          currentStudentLines: studentLines,
+        });
         toggleStudentLine(drawingLine.position);
       }
       setDrawingLine(null);
@@ -167,7 +206,11 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     if (mode === "drawCompare") {
       if (drawingLine) {
         const targetSide = drawingLine.startSide === "left" ? "right" : "left";
-        const hoverPosition = isNearStackPoint(point, targetSide);
+        const hoverPosition = isNearStackPoint(
+          point,
+          targetSide,
+          drawingLine.position
+        );
 
         if (hoverPosition === drawingLine.position) {
           const snapPoint = getSnapPoint(targetSide, hoverPosition);
