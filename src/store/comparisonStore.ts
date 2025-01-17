@@ -40,7 +40,18 @@ export const useComparisonStore = create<ComparisonState>((set) => ({
     set((state) => ({
       ...(side === "left" ? { leftStack: value } : { rightStack: value }),
     })),
-  setMode: (mode) => set({ mode }),
+  setMode: (mode) => 
+    set((state) => ({
+      mode,
+      ...(state.mode === "drawCompare" && 
+          mode !== "drawCompare" && 
+          (!state.studentLines.top || !state.studentLines.bottom) && {
+        studentLines: {
+          top: false,
+          bottom: false
+        }
+      })
+    })),
   toggleAutoLines: () =>
     set((state) => ({ showAutoLines: !state.showAutoLines })),
   setStudentLine: (position, value) =>
