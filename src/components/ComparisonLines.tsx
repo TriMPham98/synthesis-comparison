@@ -84,7 +84,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           rightX,
           isTop
             ? rightBaseY + rightHeight - BLOCK_HEIGHT * 0.7
-            : rightBaseY + BLOCK_HEIGHT * 0.3,
+            : rightBaseY - BLOCK_HEIGHT * 0.5,
           rightPos[2],
         ],
       ] as const;
