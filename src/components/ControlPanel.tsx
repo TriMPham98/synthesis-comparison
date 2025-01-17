@@ -2,8 +2,15 @@ import { Plus, Minus, MousePointer2, Pencil, Play } from "lucide-react";
 import { useComparisonStore } from "../store/comparisonStore";
 
 export function ControlPanel() {
-  const { leftStack, rightStack, mode, setStack, setMode } =
-    useComparisonStore();
+  const {
+    leftStack,
+    rightStack,
+    mode,
+    setStack,
+    setMode,
+    studentLines,
+    setIsAnimating,
+  } = useComparisonStore();
 
   const handleModeClick = (newMode: "addRemove" | "drawCompare" | "none") => {
     if (mode === newMode) {
@@ -18,6 +25,20 @@ export function ControlPanel() {
   // Helper function to return an empty string if the value is 0 but only when the user is typing
   const displayValue = (value: number, isTyping: boolean) =>
     isTyping ? "" : value.toString();
+
+  const handleAnimateClick = () => {
+    // Only allow animation when both lines are drawn
+    if (!studentLines.top || !studentLines.bottom) {
+      return;
+    }
+
+    setIsAnimating(true);
+
+    // Reset animation after completion
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 1000); // Animation duration
+  };
 
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white py-4">
@@ -68,10 +89,14 @@ export function ControlPanel() {
               <span>Compare</span>
             </button>
             <button
-              onClick={() => {
-                /* Animation logic will go here */
-              }}
-              className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg flex items-center space-x-2">
+              onClick={handleAnimateClick}
+              disabled={!studentLines.top || !studentLines.bottom}
+              className={`px-6 py-3 rounded-lg flex items-center space-x-2 
+                ${
+                  !studentLines.top || !studentLines.bottom
+                    ? "bg-gray-600 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700"
+                }`}>
               <Play size={24} />
               <span>Animate</span>
             </button>

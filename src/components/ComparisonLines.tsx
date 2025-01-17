@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import { useCursor } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 
 interface ComparisonLinesProps {
   leftPos: [number, number, number];
@@ -11,7 +12,13 @@ interface ComparisonLinesProps {
 }
 
 export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
-  const { mode, studentLines, setStudentLine } = useComparisonStore();
+  const { mode, studentLines, isAnimating, setStudentLine } = useComparisonStore();
+  const animationProgress = useComparisonStore(
+    (state) => state.animationProgress
+  );
+  const setAnimationProgress = useComparisonStore(
+    (state) => state.setAnimationProgress
+  );
   const leftStack = useComparisonStore((state) => state.leftStack);
   const rightStack = useComparisonStore((state) => state.rightStack);
 
@@ -26,6 +33,14 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   const convergencePointRef = useRef<[number, number, number] | null>(null);
 
   useCursor(hovered && mode === "drawCompare");
+
+  useFrame((_, delta) => {
+    if (isAnimating) {
+      setAnimationProgress((prev) => Math.min(1, prev + delta));
+    } else {
+      setAnimationProgress(0);
+    }
+  });
 
   const getLinePoints = (isTop: boolean) => {
     const BLOCK_HEIGHT = 0.5;
@@ -582,6 +597,51 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     }
   }, [leftStack, rightStack, leftPos, rightPos, mode, studentLines]);
 
+  const getAnimatedLinePoints = (isTop: boolean) => {
+    if (!isAnimating) return getLinePoints(isTop);
+
+    const originalPoints = getLinePoints(isTop);
+    const [start, end] = originalPoints;
+
+    // Calculate the comparison operator position (center point)
+    const centerX = (leftPos[0] + rightPos[0]) / 2;
+    const centerY = (start[1] + end[1]) / 2 - 0.3; // Adjust Y position to match operator
+
+    // Calculate the angle based on whether it's less than or greater than
+    const angle =
+      leftStack < rightStack ? -30 : leftStack > rightStack ? 30 : 0;
+
+    // Calculate the animated end points
+    const length = 0.5; // Length of the comparison operator lines
+    const radians = (angle * Math.PI) / 180;
+
+    const animatedStart = [
+      centerX - Math.cos(radians) * length,
+      centerY - Math.sin(radians) * length,
+      0,
+    ];
+
+    const animatedEnd = [
+      centerX + Math.cos(radians) * length,
+      centerY + Math.sin(radians) * length,
+      0,
+    ];
+
+    // Interpolate between original and animated positions
+    return [
+      [
+        THREE.MathUtils.lerp(start[0], animatedStart[0], animationProgress),
+        THREE.MathUtils.lerp(start[1], animatedStart[1], animationProgress),
+        THREE.MathUtils.lerp(start[2], animatedStart[2], animationProgress),
+      ],
+      [
+        THREE.MathUtils.lerp(end[0], animatedEnd[0], animationProgress),
+        THREE.MathUtils.lerp(end[1], animatedEnd[1], animationProgress),
+        THREE.MathUtils.lerp(end[2], animatedEnd[2], animationProgress),
+      ],
+    ] as const;
+  };
+
   return (
     <group>
       <Plane
@@ -597,7 +657,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         <>
           {/* Outer glow line */}
           <Line
-            points={getLinePoints(true)}
+            points={getAnimatedLinePoints(true)}
             color="#00ffff"
             lineWidth={8}
             dashed={false}
@@ -607,7 +667,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           />
           {/* Inner bright line */}
           <Line
-            points={getLinePoints(true)}
+            points={getAnimatedLinePoints(true)}
             color="#ffffff"
             lineWidth={4}
             dashed={false}
@@ -621,7 +681,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         <>
           {/* Outer glow line */}
           <Line
-            points={getLinePoints(false)}
+            points={getAnimatedLinePoints(false)}
             color="#00ffff"
             lineWidth={8}
             dashed={false}
@@ -631,7 +691,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           />
           {/* Inner bright line */}
           <Line
-            points={getLinePoints(false)}
+            points={getAnimatedLinePoints(false)}
             color="#ffffff"
             lineWidth={4}
             dashed={false}

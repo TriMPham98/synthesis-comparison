@@ -14,12 +14,16 @@ interface ComparisonState {
     right: string;
   };
   labelMode: "input" | "label";
+  isAnimating: boolean;
+  animationProgress: number;
   setStack: (side: "left" | "right", value: number) => void;
   setMode: (mode: "none" | "addRemove" | "drawCompare") => void;
   toggleAutoLines: () => void;
   setStudentLine: (position: "top" | "bottom", value: boolean) => void;
   setLabel: (side: "left" | "right", value: string) => void;
   setLabelMode: (mode: "input" | "label") => void;
+  setIsAnimating: (value: boolean) => void;
+  setAnimationProgress: (value: number) => void;
 }
 
 export const useComparisonStore = create<ComparisonState>((set) => ({
@@ -36,21 +40,23 @@ export const useComparisonStore = create<ComparisonState>((set) => ({
     right: "0",
   },
   labelMode: "label",
+  isAnimating: false,
+  animationProgress: 0,
   setStack: (side, value) =>
     set((state) => ({
       ...(side === "left" ? { leftStack: value } : { rightStack: value }),
     })),
-  setMode: (mode) => 
+  setMode: (mode) =>
     set((state) => ({
       mode,
-      ...(state.mode === "drawCompare" && 
-          mode !== "drawCompare" && 
-          (!state.studentLines.top || !state.studentLines.bottom) && {
-        studentLines: {
-          top: false,
-          bottom: false
-        }
-      })
+      ...(state.mode === "drawCompare" &&
+        mode !== "drawCompare" &&
+        (!state.studentLines.top || !state.studentLines.bottom) && {
+          studentLines: {
+            top: false,
+            bottom: false,
+          },
+        }),
     })),
   toggleAutoLines: () =>
     set((state) => ({ showAutoLines: !state.showAutoLines })),
@@ -69,4 +75,6 @@ export const useComparisonStore = create<ComparisonState>((set) => ({
       },
     })),
   setLabelMode: (mode) => set({ labelMode: mode }),
+  setIsAnimating: (value) => set({ isAnimating: value }),
+  setAnimationProgress: (value) => set({ animationProgress: value }),
 }));
