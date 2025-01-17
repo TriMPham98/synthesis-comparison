@@ -39,17 +39,19 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const rightX = rightPos[0] - 0.45;
 
     if (rightStack === 0) {
-      const leftTopEdge = leftBaseY + leftHeight;
-      const leftTopBlockY = leftTopEdge - BLOCK_HEIGHT * 0.8;
-      const leftBottomBlockY = leftBaseY - BLOCK_HEIGHT * 0.2;
+      const topOffset = -0.05;
+      const bottomOffset = -0.55;
 
       if (!convergencePointRef.current) {
-        const centerY = (leftTopBlockY + leftBottomBlockY) / 2;
-        convergencePointRef.current = [rightX, centerY, rightPos[2]];
+        convergencePointRef.current = [
+          rightX,
+          isTop ? topOffset : bottomOffset,
+          rightPos[2],
+        ];
       }
 
       return [
-        [leftX, isTop ? leftTopBlockY : leftBottomBlockY, leftPos[2]],
+        [leftX, isTop ? topOffset : bottomOffset, leftPos[2]],
         convergencePointRef.current,
       ] as const;
     }
