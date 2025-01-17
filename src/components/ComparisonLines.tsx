@@ -562,7 +562,11 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             slope: (topEnd[1] - topStart[1]) / (topEnd[0] - topStart[0]),
           },
           bottom: {
-            start: { x: bottomStart[0], y: bottomStart[1], z: bottomStart[2] },
+            start: {
+              x: bottomStart[0],
+              y: bottomStart[1],
+              z: bottomStart[2],
+            },
             end: { x: bottomEnd[0], y: bottomEnd[1], z: bottomEnd[2] },
             vector: bottomVector,
             slope:
@@ -604,41 +608,13 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const originalPoints = getLinePoints(isTop);
     const [start, end] = originalPoints;
 
-    // Calculate the comparison operator position (center point)
-    const centerX = (leftPos[0] + rightPos[0]) / 2;
-    const centerY = (start[1] + end[1]) / 2 - 0.3; // Adjust Y position to match operator
-
-    // Calculate the angle based on whether it's less than or greater than
-    const angle =
-      leftStack < rightStack ? -30 : leftStack > rightStack ? 30 : 0;
-
-    // Calculate the animated end points
-    const length = 0.5; // Length of the comparison operator lines
-    const radians = (angle * Math.PI) / 180;
-
-    const animatedStart = [
-      centerX - Math.cos(radians) * length,
-      centerY - Math.sin(radians) * length,
-      0,
-    ];
-
-    const animatedEnd = [
-      centerX + Math.cos(radians) * length,
-      centerY + Math.sin(radians) * length,
-      0,
-    ];
-
-    // Interpolate between original and animated positions
+    // Animate the drawing process from start to end point
     return [
+      [start[0], start[1], start[2]],
       [
-        THREE.MathUtils.lerp(start[0], animatedStart[0], animationProgress),
-        THREE.MathUtils.lerp(start[1], animatedStart[1], animationProgress),
-        THREE.MathUtils.lerp(start[2], animatedStart[2], animationProgress),
-      ],
-      [
-        THREE.MathUtils.lerp(end[0], animatedEnd[0], animationProgress),
-        THREE.MathUtils.lerp(end[1], animatedEnd[1], animationProgress),
-        THREE.MathUtils.lerp(end[2], animatedEnd[2], animationProgress),
+        THREE.MathUtils.lerp(start[0], end[0], animationProgress),
+        THREE.MathUtils.lerp(start[1], end[1], animationProgress),
+        THREE.MathUtils.lerp(start[2], end[2], animationProgress),
       ],
     ] as const;
   };

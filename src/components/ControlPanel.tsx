@@ -37,7 +37,7 @@ export function ControlPanel() {
     // Reset animation after completion
     setTimeout(() => {
       setIsAnimating(false);
-    }, 1000); // Animation duration
+    }, 1000); // Back to 1 second since we're only doing one animation
   };
 
   return (
