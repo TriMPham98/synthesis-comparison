@@ -1,4 +1,4 @@
-import { Plus, Minus, MousePointer2, Pencil, Play } from "lucide-react";
+import { Plus, Minus, MousePointer2, Pencil, Play, Eye } from "lucide-react";
 import { useComparisonStore } from "../store/comparisonStore";
 
 export function ControlPanel() {
@@ -10,6 +10,8 @@ export function ControlPanel() {
     setMode,
     studentLines,
     setIsAnimating,
+    showAutoLines,
+    toggleAutoLines,
   } = useComparisonStore();
 
   const handleModeClick = (newMode: "addRemove" | "drawCompare" | "none") => {
@@ -87,6 +89,14 @@ export function ControlPanel() {
               }`}>
               <Pencil size={24} />
               <span>Compare</span>
+            </button>
+            <button
+              onClick={toggleAutoLines}
+              className={`px-6 py-3 rounded-lg flex items-center space-x-2 ${
+                showAutoLines ? "bg-blue-600" : "bg-gray-700"
+              }`}>
+              <Eye size={24} />
+              <span>Auto&nbsp;Lines</span>
             </button>
             <button
               onClick={handleAnimateClick}

@@ -12,7 +12,7 @@ interface ComparisonLinesProps {
 }
 
 export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
-  const { mode, studentLines, isAnimating, setStudentLine } =
+  const { mode, studentLines, isAnimating, setStudentLine, showAutoLines } =
     useComparisonStore();
   const animationProgress = useComparisonStore(
     (state) => state.animationProgress
@@ -629,6 +629,36 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         visible={false}>
         <meshBasicMaterial transparent opacity={0} />
       </Plane>
+
+      {/* Auto comparison lines */}
+      {showAutoLines && (
+        <>
+          {/* Auto top line */}
+          <Line
+            points={getLinePoints(true)}
+            color="#666666"
+            lineWidth={2}
+            dashed={true}
+            dashSize={0.1}
+            gapSize={0.1}
+            transparent
+            opacity={0.5}
+            toneMapped={false}
+          />
+          {/* Auto bottom line */}
+          <Line
+            points={getLinePoints(false)}
+            color="#666666"
+            lineWidth={2}
+            dashed={true}
+            dashSize={0.1}
+            gapSize={0.1}
+            transparent
+            opacity={0.5}
+            toneMapped={false}
+          />
+        </>
+      )}
 
       {studentLines.top && (
         <>
