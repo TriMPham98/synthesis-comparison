@@ -146,9 +146,14 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const BLOCK_HEIGHT = 0.5;
 
     const xDistance = Math.abs(point.x - stackPos[0]);
-    if (xDistance > 0.3) return null;
+    const X_THRESHOLD = 0.5;
+    const X_PREFERRED = 0.35;
 
-    const Y_THRESHOLD = 0.25;
+    if (preferredPosition && xDistance > X_PREFERRED) return null;
+    if (!preferredPosition && xDistance > X_THRESHOLD) return null;
+
+    const Y_THRESHOLD = 0.4;
+    const Y_PREFERRED = 0.3;
 
     if (stackCount === 0) {
       const baseY = stackPos[1] - BLOCK_HEIGHT * 0.75;
@@ -156,15 +161,18 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
       if (preferredPosition === "top") {
         const topDistance = Math.abs(point.y - singlePointY);
-        return topDistance < Y_THRESHOLD ? "top" : null;
+        return topDistance < Y_PREFERRED ? "top" : null;
       } else if (preferredPosition === "bottom") {
         const bottomDistance = Math.abs(point.y - baseY);
-        return bottomDistance < Y_THRESHOLD ? "bottom" : null;
+        return bottomDistance < Y_PREFERRED ? "bottom" : null;
       }
 
       const topDistance = Math.abs(point.y - singlePointY);
       const bottomDistance = Math.abs(point.y - baseY);
 
+      if (topDistance < Y_THRESHOLD && bottomDistance < Y_THRESHOLD) {
+        return topDistance < bottomDistance ? "top" : "bottom";
+      }
       if (topDistance < Y_THRESHOLD) return "top";
       if (bottomDistance < Y_THRESHOLD) return "bottom";
       return null;
@@ -177,15 +185,18 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
     if (preferredPosition === "top") {
       const topDistance = Math.abs(point.y - topY);
-      return topDistance < Y_THRESHOLD ? "top" : null;
+      return topDistance < Y_PREFERRED ? "top" : null;
     } else if (preferredPosition === "bottom") {
       const bottomDistance = Math.abs(point.y - bottomY);
-      return bottomDistance < Y_THRESHOLD ? "bottom" : null;
+      return bottomDistance < Y_PREFERRED ? "bottom" : null;
     }
 
     const topDistance = Math.abs(point.y - topY);
     const bottomDistance = Math.abs(point.y - bottomY);
 
+    if (topDistance < Y_THRESHOLD && bottomDistance < Y_THRESHOLD) {
+      return topDistance < bottomDistance ? "top" : "bottom";
+    }
     if (topDistance < Y_THRESHOLD) return "top";
     if (bottomDistance < Y_THRESHOLD) return "bottom";
     return null;
