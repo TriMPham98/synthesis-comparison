@@ -1,6 +1,6 @@
 import { Line, Plane } from "@react-three/drei";
 import { useComparisonStore } from "../store/comparisonStore";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import { useCursor } from "@react-three/drei";
@@ -23,6 +23,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   } | null>(null);
   const [hovered, setHovered] = useState(false);
 
+  const convergencePointRef = useRef<[number, number, number] | null>(null);
+
   useCursor(hovered && mode === "drawCompare");
 
   const getLinePoints = (isTop: boolean) => {
@@ -41,17 +43,18 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       const leftTopBlockY = leftTopEdge - BLOCK_HEIGHT * 0.8;
       const leftBottomBlockY = leftBaseY - BLOCK_HEIGHT * 0.2;
 
-      const leftSpan = leftTopBlockY - leftBottomBlockY;
-      const horizontalDistance = rightX - leftX;
-      const convergenceY = (leftTopBlockY + leftBottomBlockY) / 2;
-
-      const rightY = convergenceY;
+      if (!convergencePointRef.current) {
+        const centerY = (leftTopBlockY + leftBottomBlockY) / 2;
+        convergencePointRef.current = [rightX, centerY, rightPos[2]];
+      }
 
       return [
-        [leftX, isTop ? leftTopBlockY : leftBottomBlockY, leftPos[2]] as const,
-        [rightX, rightY, rightPos[2]] as const,
+        [leftX, isTop ? leftTopBlockY : leftBottomBlockY, leftPos[2]],
+        convergencePointRef.current,
       ] as const;
     }
+
+    convergencePointRef.current = null;
 
     if (isTop) {
       const leftTopEdge = leftBaseY + leftHeight;
@@ -61,16 +64,16 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       const rightTopBlockY = rightTopEdge - BLOCK_HEIGHT * 0.8;
 
       return [
-        [leftX, leftTopBlockY, leftPos[2]] as const,
-        [rightX, rightTopBlockY, rightPos[2]] as const,
+        [leftX, leftTopBlockY, leftPos[2]],
+        [rightX, rightTopBlockY, rightPos[2]],
       ] as const;
     } else {
       const leftBottomBlockY = leftBaseY - BLOCK_HEIGHT * 0.2;
       const rightBottomBlockY = rightBaseY - BLOCK_HEIGHT * 0.2;
 
       return [
-        [leftX, leftBottomBlockY, leftPos[2]] as const,
-        [rightX, rightBottomBlockY, rightPos[2]] as const,
+        [leftX, leftBottomBlockY, leftPos[2]],
+        [rightX, rightBottomBlockY, rightPos[2]],
       ] as const;
     }
   };
@@ -270,6 +273,12 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     }
   };
 
+  useEffect(() => {
+    if (!studentLines.top && !studentLines.bottom) {
+      convergencePointRef.current = null;
+    }
+  }, [studentLines]);
+
   return (
     <group>
       <Plane
@@ -290,7 +299,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           transparent
           opacity={1}
           toneMapped={false}
-          position={[0, 0.05, 0]}
         />
       )}
       {studentLines.bottom && (
@@ -302,7 +310,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           transparent
           opacity={1}
           toneMapped={false}
-          position={[0, -0.15, 0]}
         />
       )}
       {drawingLine && (
