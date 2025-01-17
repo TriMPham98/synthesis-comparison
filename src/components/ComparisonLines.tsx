@@ -38,6 +38,16 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const leftX = leftPos[0] + 0.45;
     const rightX = rightPos[0] - 0.45;
 
+    if (leftStack === 0 && rightStack === 0) {
+      const topOffset = -0.05;
+      const bottomOffset = -0.55;
+
+      return [
+        [leftX, isTop ? topOffset : bottomOffset, leftPos[2]],
+        [rightX, isTop ? topOffset : bottomOffset, rightPos[2]],
+      ] as const;
+    }
+
     if (rightStack === 0) {
       const topOffset = -0.05;
       const bottomOffset = -0.55;
