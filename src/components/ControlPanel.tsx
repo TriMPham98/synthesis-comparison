@@ -84,7 +84,12 @@ export function ControlPanel() {
           <div className="flex flex-col space-y-2">
             <div className="flex justify-center space-x-4">
               <button
-                onClick={clearAll}
+                onClick={() => {
+                  clearAll();
+                  if (showAutoLines) {
+                    toggleAutoLines();
+                  }
+                }}
                 className="px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center bg-red-600 hover:bg-red-700">
                 <Trash2 size={24} />
                 <span>Clear All</span>
