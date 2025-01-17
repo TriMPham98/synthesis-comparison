@@ -184,6 +184,45 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           currentStudentLines: studentLines,
         });
         setStudentLine(drawingLine.position, true);
+
+        if (studentLines.top || studentLines.bottom) {
+          const [topStart, topEnd] = getLinePoints(true);
+          const [bottomStart, bottomEnd] = getLinePoints(false);
+
+          const topVector = new THREE.Vector3(
+            topEnd[0] - topStart[0],
+            topEnd[1] - topStart[1],
+            topEnd[2] - topStart[2]
+          );
+          const bottomVector = new THREE.Vector3(
+            bottomEnd[0] - bottomStart[0],
+            bottomEnd[1] - bottomStart[1],
+            bottomEnd[2] - bottomStart[2]
+          );
+
+          const angle = topVector.angleTo(bottomVector) * (180 / Math.PI);
+
+          const topMidpoint = new THREE.Vector3(
+            (topStart[0] + topEnd[0]) / 2,
+            (topStart[1] + topEnd[1]) / 2,
+            (topStart[2] + topEnd[2]) / 2
+          );
+          const bottomMidpoint = new THREE.Vector3(
+            (bottomStart[0] + bottomEnd[0]) / 2,
+            (bottomStart[1] + bottomEnd[1]) / 2,
+            (bottomStart[2] + bottomEnd[2]) / 2
+          );
+          const distance = topMidpoint.distanceTo(bottomMidpoint);
+
+          console.log("Line Measurements:", {
+            angle: angle.toFixed(2) + "°",
+            distance: distance.toFixed(2) + " units",
+            topVector,
+            bottomVector,
+            topMidpoint,
+            bottomMidpoint,
+          });
+        }
       }
       setDrawingLine(null);
     }
