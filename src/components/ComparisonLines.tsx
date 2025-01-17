@@ -217,13 +217,58 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           );
           const distance = topMidpoint.distanceTo(bottomMidpoint);
 
-          console.log("Line Measurements:", {
-            angle: angle.toFixed(2) + "°",
-            distance: distance.toFixed(2) + " units",
-            topVector,
-            bottomVector,
-            topMidpoint,
-            bottomMidpoint,
+          const BLOCK_HEIGHT = 0.5;
+          const leftHeight = Math.max(leftStack * 0.6, BLOCK_HEIGHT);
+          const rightHeight = Math.max(rightStack * 0.6, BLOCK_HEIGHT);
+          const leftBaseY = leftPos[1] - leftHeight / 2;
+          const rightBaseY = rightPos[1] - rightHeight / 2;
+
+          console.log("Detailed Line Analysis:", {
+            lines: {
+              top: {
+                start: { x: topStart[0], y: topStart[1], z: topStart[2] },
+                end: { x: topEnd[0], y: topEnd[1], z: topEnd[2] },
+                vector: topVector,
+                slope: (topEnd[1] - topStart[1]) / (topEnd[0] - topStart[0]),
+              },
+              bottom: {
+                start: {
+                  x: bottomStart[0],
+                  y: bottomStart[1],
+                  z: bottomStart[2],
+                },
+                end: { x: bottomEnd[0], y: bottomEnd[1], z: bottomEnd[2] },
+                vector: bottomVector,
+                slope:
+                  (bottomEnd[1] - bottomStart[1]) /
+                  (bottomEnd[0] - bottomStart[0]),
+              },
+              measurements: {
+                angle: angle.toFixed(2) + "°",
+                distance: distance.toFixed(2) + " units",
+                midpoints: {
+                  top: topMidpoint,
+                  bottom: bottomMidpoint,
+                },
+              },
+            },
+            blocks: {
+              left: {
+                stackCount: leftStack,
+                height: leftHeight.toFixed(2),
+                baseY: leftBaseY.toFixed(2),
+                topY: (leftBaseY + leftHeight).toFixed(2),
+                position: leftPos,
+              },
+              right: {
+                stackCount: rightStack,
+                height: rightHeight.toFixed(2),
+                baseY: rightBaseY.toFixed(2),
+                topY: (rightBaseY + rightHeight).toFixed(2),
+                position: rightPos,
+              },
+            },
+            convergencePoint: convergencePointRef.current,
           });
         }
       }
