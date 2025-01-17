@@ -583,46 +583,94 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       </Plane>
 
       {studentLines.top && (
-        <Line
-          points={getLinePoints(true)}
-          color="#ff00ff"
-          lineWidth={3}
-          dashed={false}
-          transparent
-          opacity={1}
-          toneMapped={false}
-        />
+        <>
+          {/* Outer glow line */}
+          <Line
+            points={getLinePoints(true)}
+            color="#00ffff"
+            lineWidth={8}
+            dashed={false}
+            transparent
+            opacity={0.4}
+            toneMapped={false}
+          />
+          {/* Inner bright line */}
+          <Line
+            points={getLinePoints(true)}
+            color="#ffffff"
+            lineWidth={4}
+            dashed={false}
+            transparent
+            opacity={0.9}
+            toneMapped={false}
+          />
+        </>
       )}
       {studentLines.bottom && (
-        <Line
-          points={getLinePoints(false)}
-          color="#ff00ff"
-          lineWidth={3}
-          dashed={false}
-          transparent
-          opacity={1}
-          toneMapped={false}
-        />
+        <>
+          {/* Outer glow line */}
+          <Line
+            points={getLinePoints(false)}
+            color="#00ffff"
+            lineWidth={8}
+            dashed={false}
+            transparent
+            opacity={0.4}
+            toneMapped={false}
+          />
+          {/* Inner bright line */}
+          <Line
+            points={getLinePoints(false)}
+            color="#ffffff"
+            lineWidth={4}
+            dashed={false}
+            transparent
+            opacity={0.9}
+            toneMapped={false}
+          />
+        </>
       )}
       {drawingLine && (
-        <Line
-          points={[
-            [drawingLine.start.x, drawingLine.start.y, drawingLine.start.z],
-            [
-              drawingLine.currentEnd.x,
-              drawingLine.currentEnd.y,
-              drawingLine.currentEnd.z,
-            ],
-          ]}
-          color="#ff00ff"
-          lineWidth={3}
-          dashed={true}
-          dashSize={0.1}
-          gapSize={0.1}
-          transparent
-          opacity={0.5}
-          toneMapped={false}
-        />
+        <>
+          {/* Outer glow line for preview */}
+          <Line
+            points={[
+              [drawingLine.start.x, drawingLine.start.y, drawingLine.start.z],
+              [
+                drawingLine.currentEnd.x,
+                drawingLine.currentEnd.y,
+                drawingLine.currentEnd.z,
+              ],
+            ]}
+            color="#00ffff"
+            lineWidth={8}
+            dashed={true}
+            dashSize={0.1}
+            gapSize={0.1}
+            transparent
+            opacity={0.3}
+            toneMapped={false}
+          />
+          {/* Inner bright line for preview */}
+          <Line
+            points={[
+              [drawingLine.start.x, drawingLine.start.y, drawingLine.start.z],
+              [
+                drawingLine.currentEnd.x,
+                drawingLine.currentEnd.y,
+                drawingLine.currentEnd.z,
+              ],
+            ]}
+            color="#ffffff"
+            lineWidth={4}
+            dashed={true}
+            dashSize={0.1}
+            gapSize={0.1}
+            transparent
+            opacity={0.6}
+            toneMapped={false}
+          />
+        </>
       )}
     </group>
   );
