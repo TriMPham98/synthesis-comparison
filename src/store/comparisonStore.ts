@@ -43,7 +43,7 @@ export const useComparisonStore = create<ComparisonState>((set) => ({
   isAnimating: false,
   animationProgress: 0,
   setStack: (side, value) =>
-    set((state) => ({
+    set(() => ({
       ...(side === "left" ? { leftStack: value } : { rightStack: value }),
     })),
   setMode: (mode) =>

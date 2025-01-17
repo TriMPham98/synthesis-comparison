@@ -1,5 +1,4 @@
 import { Text } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Group } from "three";
 import { useComparisonStore } from "../store/comparisonStore";

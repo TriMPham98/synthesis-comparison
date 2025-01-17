@@ -4,7 +4,7 @@ import { Stack } from "./components/Stack";
 import { ComparisonLines } from "./components/ComparisonLines";
 import { ControlPanel } from "./components/ControlPanel";
 import { ComparisonOperator } from "./components/ComparisonOperator";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useComparisonStore } from "./store/comparisonStore";
 import * as THREE from "three";
