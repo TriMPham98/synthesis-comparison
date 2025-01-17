@@ -44,9 +44,9 @@ export function ControlPanel() {
 
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white py-4">
-      <div className="max-w-6xl mx-auto px-8 flex justify-between items-center">
+      <div className="max-w-6xl mx-auto px-8 flex justify-center items-center gap-24">
         <div className="flex flex-col items-center">
-          <h3 className="text-xl font-bold mb-4">Left Stack</h3>
+          <h3 className="text-xl font-bold mb-4 text-center">Left Stack</h3>
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setStack("left", Math.max(0, leftStack - 1))}
@@ -55,9 +55,8 @@ export function ControlPanel() {
             </button>
             <input
               type="number"
-              value={displayValue(leftStack, false)} // Default to showing the value
+              value={displayValue(leftStack, false)}
               onChange={(e) => {
-                // Here we pass `true` for `isTyping` to clear the 0 when typing
                 const newValue = e.target.value ? parseInt(e.target.value) : 0;
                 setStack("left", Math.min(10, Math.max(0, newValue)));
               }}
@@ -71,8 +70,8 @@ export function ControlPanel() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center flex-grow px-12">
-          <h3 className="text-xl font-bold mb-4">Mode</h3>
+        <div className="flex flex-col items-center">
+          <h3 className="text-xl font-bold mb-4 text-center">Mode</h3>
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => handleModeClick("addRemove")}
@@ -114,7 +113,7 @@ export function ControlPanel() {
         </div>
 
         <div className="flex flex-col items-center">
-          <h3 className="text-xl font-bold mb-4">Right Stack</h3>
+          <h3 className="text-xl font-bold mb-4 text-center">Right Stack</h3>
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setStack("right", Math.max(0, rightStack - 1))}
@@ -123,7 +122,7 @@ export function ControlPanel() {
             </button>
             <input
               type="number"
-              value={displayValue(rightStack, false)} // Default to showing the value
+              value={displayValue(rightStack, false)}
               onChange={(e) => {
                 const newValue = e.target.value ? parseInt(e.target.value) : 0;
                 setStack("right", Math.min(10, Math.max(0, newValue)));
