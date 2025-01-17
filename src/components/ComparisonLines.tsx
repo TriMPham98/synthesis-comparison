@@ -11,7 +11,7 @@ interface ComparisonLinesProps {
 }
 
 export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
-  const { mode, studentLines, toggleStudentLine } = useComparisonStore();
+  const { mode, studentLines, setStudentLine } = useComparisonStore();
   const leftStack = useComparisonStore((state) => state.leftStack);
   const rightStack = useComparisonStore((state) => state.rightStack);
 
@@ -141,11 +141,6 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     if (mode !== "drawCompare") return;
 
     const point = e.point.clone();
-    console.log("Click detected:", {
-      point: { x: point.x, y: point.y, z: point.z },
-      mode,
-      drawingLine: !!drawingLine,
-    });
 
     if (!drawingLine) {
       const leftPosition = isNearStackPoint(point, "left");
@@ -160,26 +155,21 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         ? isNearStackPoint(point, "right", preferredPosition)
         : rightPosition;
 
-      console.log("Snap check results:", {
-        leftPosition: finalLeftPosition,
-        rightPosition: finalRightPosition,
-        studentLines,
-        preferredPosition,
-      });
+      const position = studentLines.top ? "bottom" : "top";
 
       if (finalLeftPosition) {
-        const snapPoint = getSnapPoint("left", finalLeftPosition);
+        const snapPoint = getSnapPoint("left", position);
         setDrawingLine({
           start: snapPoint,
-          position: finalLeftPosition,
+          position: position,
           startSide: "left",
           currentEnd: snapPoint.clone(),
         });
       } else if (finalRightPosition) {
-        const snapPoint = getSnapPoint("right", finalRightPosition);
+        const snapPoint = getSnapPoint("right", position);
         setDrawingLine({
           start: snapPoint,
-          position: finalRightPosition,
+          position: position,
           startSide: "right",
           currentEnd: snapPoint.clone(),
         });
@@ -192,19 +182,12 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         drawingLine.position
       );
 
-      console.log("Attempting to complete line:", {
-        targetSide,
-        endPosition,
-        drawingLinePosition: drawingLine.position,
-        point: { x: point.x, y: point.y, z: point.z },
-      });
-
-      if (endPosition && !studentLines[endPosition]) {
+      if (endPosition) {
         console.log("Completing line:", {
-          position: endPosition,
+          position: drawingLine.position,
           currentStudentLines: studentLines,
         });
-        toggleStudentLine(endPosition);
+        setStudentLine(drawingLine.position, true);
       }
       setDrawingLine(null);
     }
@@ -267,22 +250,24 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         <Line
           points={getLinePoints(true)}
           color="#ff00ff"
-          lineWidth={3}
+          lineWidth={2}
           dashed={false}
           transparent
           opacity={0.8}
           toneMapped={false}
+          position={[0, 0.05, 0]}
         />
       )}
       {studentLines.bottom && (
         <Line
           points={getLinePoints(false)}
           color="#ff00ff"
-          lineWidth={3}
+          lineWidth={2}
           dashed={false}
           transparent
           opacity={0.8}
           toneMapped={false}
+          position={[0, -0.05, 0]}
         />
       )}
       {drawingLine && (
