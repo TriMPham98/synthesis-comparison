@@ -1,4 +1,12 @@
-import { Plus, Minus, MousePointer2, Pencil, Play, Eye } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  MousePointer2,
+  Pencil,
+  Play,
+  Eye,
+  Trash2,
+} from "lucide-react";
 import { useComparisonStore } from "../store/comparisonStore";
 
 export function ControlPanel() {
@@ -12,6 +20,7 @@ export function ControlPanel() {
     setIsAnimating,
     showAutoLines,
     toggleAutoLines,
+    clearAll,
   } = useComparisonStore();
 
   const handleModeClick = (newMode: "addRemove" | "drawCompare" | "none") => {
@@ -73,6 +82,12 @@ export function ControlPanel() {
         <div className="flex flex-col items-center">
           <h3 className="text-xl font-bold mb-4 text-center">Mode</h3>
           <div className="flex justify-center space-x-4">
+            <button
+              onClick={clearAll}
+              className="px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center bg-red-600 hover:bg-red-700">
+              <Trash2 size={24} />
+              <span>Clear All</span>
+            </button>
             <button
               onClick={() => handleModeClick("addRemove")}
               className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center ${
