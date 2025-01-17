@@ -170,6 +170,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     if (mode !== "drawCompare") return;
 
+    if (studentLines.top && studentLines.bottom) return;
+
     const point = e.point.clone();
 
     if (!drawingLine) {
@@ -381,6 +383,11 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const point = e.point.clone();
 
     if (mode === "drawCompare") {
+      if (studentLines.top && studentLines.bottom) {
+        setHovered(false);
+        return;
+      }
+
       if (drawingLine) {
         const targetSide = drawingLine.startSide === "left" ? "right" : "left";
         const hoverPosition = isNearStackPoint(
