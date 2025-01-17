@@ -103,8 +103,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       ] as const;
     } else {
       return [
-        [leftX, leftBaseY, leftPos[2]],
-        [rightX, rightBaseY, rightPos[2]],
+        [leftX, leftBaseY - BLOCK_HEIGHT * 0.2, leftPos[2]],
+        [rightX, rightBaseY - BLOCK_HEIGHT * 0.5, rightPos[2]],
       ] as const;
     }
   };
