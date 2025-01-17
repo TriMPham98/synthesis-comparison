@@ -151,25 +151,35 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       const leftPosition = isNearStackPoint(point, "left");
       const rightPosition = isNearStackPoint(point, "right");
 
+      const preferredPosition = leftPosition || rightPosition;
+
+      const finalLeftPosition = preferredPosition
+        ? isNearStackPoint(point, "left", preferredPosition)
+        : leftPosition;
+      const finalRightPosition = preferredPosition
+        ? isNearStackPoint(point, "right", preferredPosition)
+        : rightPosition;
+
       console.log("Snap check results:", {
-        leftPosition,
-        rightPosition,
+        leftPosition: finalLeftPosition,
+        rightPosition: finalRightPosition,
         studentLines,
+        preferredPosition,
       });
 
-      if (leftPosition && !studentLines[leftPosition]) {
-        const snapPoint = getSnapPoint("left", leftPosition);
+      if (finalLeftPosition) {
+        const snapPoint = getSnapPoint("left", finalLeftPosition);
         setDrawingLine({
           start: snapPoint,
-          position: leftPosition,
+          position: finalLeftPosition,
           startSide: "left",
           currentEnd: snapPoint.clone(),
         });
-      } else if (rightPosition && !studentLines[rightPosition]) {
-        const snapPoint = getSnapPoint("right", rightPosition);
+      } else if (finalRightPosition) {
+        const snapPoint = getSnapPoint("right", finalRightPosition);
         setDrawingLine({
           start: snapPoint,
-          position: rightPosition,
+          position: finalRightPosition,
           startSide: "right",
           currentEnd: snapPoint.clone(),
         });
@@ -189,12 +199,12 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         point: { x: point.x, y: point.y, z: point.z },
       });
 
-      if (endPosition === drawingLine.position) {
+      if (endPosition && !studentLines[endPosition]) {
         console.log("Completing line:", {
-          position: drawingLine.position,
+          position: endPosition,
           currentStudentLines: studentLines,
         });
-        toggleStudentLine(drawingLine.position);
+        toggleStudentLine(endPosition);
       }
       setDrawingLine(null);
     }
@@ -212,7 +222,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           drawingLine.position
         );
 
-        if (hoverPosition === drawingLine.position) {
+        if (hoverPosition) {
           const snapPoint = getSnapPoint(targetSide, hoverPosition);
           setDrawingLine({
             ...drawingLine,
@@ -226,9 +236,19 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         }
       }
 
-      const isNearLeft = isNearStackPoint(point, "left");
-      const isNearRight = isNearStackPoint(point, "right");
-      setHovered(!!isNearLeft || !!isNearRight);
+      const leftPosition = isNearStackPoint(point, "left");
+      const rightPosition = isNearStackPoint(point, "right");
+
+      const preferredPosition = leftPosition || rightPosition;
+
+      const finalLeftPosition = preferredPosition
+        ? isNearStackPoint(point, "left", preferredPosition)
+        : leftPosition;
+      const finalRightPosition = preferredPosition
+        ? isNearStackPoint(point, "right", preferredPosition)
+        : rightPosition;
+
+      setHovered(!!finalLeftPosition || !!finalRightPosition);
     }
   };
 
