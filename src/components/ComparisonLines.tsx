@@ -54,6 +54,22 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       ] as const;
     }
 
+    if (leftStack === 0) {
+      const topOffset = -0.05;
+      const bottomOffset = -0.55;
+
+      if (!convergencePointRef.current) {
+        const convergenceX = leftX - 0.3;
+        const convergenceY = -0.3;
+        convergencePointRef.current = [convergenceX, convergenceY, leftPos[2]];
+      }
+
+      return [
+        convergencePointRef.current,
+        [rightX, isTop ? topOffset : bottomOffset, rightPos[2]],
+      ] as const;
+    }
+
     convergencePointRef.current = null;
 
     if (isTop) {
