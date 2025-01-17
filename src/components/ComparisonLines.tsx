@@ -223,6 +223,76 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
           const leftBaseY = leftPos[1] - leftHeight / 2;
           const rightBaseY = rightPos[1] - rightHeight / 2;
 
+          const getComparisonSymbol = () => {
+            if (leftStack === rightStack) return "=";
+            return leftStack > rightStack ? ">" : "<";
+          };
+
+          const getComparisonDescription = () => {
+            if (leftStack === rightStack) {
+              return `${leftStack} equals ${rightStack}`;
+            }
+            return leftStack > rightStack
+              ? `${leftStack} is greater than ${rightStack}`
+              : `${leftStack} is less than ${rightStack}`;
+          };
+
+          console.log("Block Analysis:", {
+            stacks: {
+              left: {
+                count: leftStack,
+                isEmpty: leftStack === 0,
+                isFull: leftStack === 10,
+                height: leftHeight.toFixed(2),
+                connectablePoints: {
+                  top: {
+                    y: (leftBaseY + leftHeight - BLOCK_HEIGHT * 0.8).toFixed(2),
+                    x: (leftPos[0] + 0.45).toFixed(2),
+                    z: leftPos[2],
+                  },
+                  bottom: {
+                    y: (leftBaseY - BLOCK_HEIGHT * 0.2).toFixed(2),
+                    x: (leftPos[0] + 0.45).toFixed(2),
+                    z: leftPos[2],
+                  },
+                },
+              },
+              right: {
+                count: rightStack,
+                isEmpty: rightStack === 0,
+                isFull: rightStack === 10,
+                height: rightHeight.toFixed(2),
+                connectablePoints: {
+                  top: {
+                    y: (rightBaseY + rightHeight - BLOCK_HEIGHT * 0.8).toFixed(
+                      2
+                    ),
+                    x: (rightPos[0] - 0.45).toFixed(2),
+                    z: rightPos[2],
+                  },
+                  bottom: {
+                    y: (rightBaseY - BLOCK_HEIGHT * 0.2).toFixed(2),
+                    x: (rightPos[0] - 0.45).toFixed(2),
+                    z: rightPos[2],
+                  },
+                },
+              },
+            },
+            comparison: {
+              symbol: getComparisonSymbol(),
+              description: getComparisonDescription(),
+              difference: Math.abs(leftStack - rightStack),
+              ratio:
+                rightStack !== 0 ? (leftStack / rightStack).toFixed(2) : "∞",
+            },
+            state: {
+              hasTopLine: studentLines.top,
+              hasBottomLine: studentLines.bottom,
+              isComplete: studentLines.top && studentLines.bottom,
+              mode,
+            },
+          });
+
           console.log("Detailed Line Analysis:", {
             lines: {
               top: {
