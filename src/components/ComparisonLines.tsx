@@ -60,16 +60,16 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       const leftTopEdge = leftBaseY + leftHeight;
       const rightTopEdge = rightBaseY + rightHeight;
 
-      const leftTopBlockY = leftTopEdge - BLOCK_HEIGHT * 0.8;
-      const rightTopBlockY = rightTopEdge - BLOCK_HEIGHT * 0.8;
+      const leftTopBlockY = leftTopEdge - BLOCK_HEIGHT * 0.7;
+      const rightTopBlockY = rightTopEdge - BLOCK_HEIGHT * 0.7;
 
       return [
         [leftX, leftTopBlockY, leftPos[2]],
         [rightX, rightTopBlockY, rightPos[2]],
       ] as const;
     } else {
-      const leftBottomBlockY = leftBaseY - BLOCK_HEIGHT * 0.2;
-      const rightBottomBlockY = rightBaseY - BLOCK_HEIGHT * 0.2;
+      const leftBottomBlockY = leftBaseY - BLOCK_HEIGHT * 0.5;
+      const rightBottomBlockY = rightBaseY - BLOCK_HEIGHT * 0.5;
 
       return [
         [leftX, leftBottomBlockY, leftPos[2]],
@@ -246,12 +246,12 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
                 height: leftHeight.toFixed(2),
                 connectablePoints: {
                   top: {
-                    y: (leftBaseY + leftHeight - BLOCK_HEIGHT * 0.8).toFixed(2),
+                    y: (leftBaseY + leftHeight - BLOCK_HEIGHT * 0.7).toFixed(2),
                     x: (leftPos[0] + 0.45).toFixed(2),
                     z: leftPos[2],
                   },
                   bottom: {
-                    y: (leftBaseY - BLOCK_HEIGHT * 0.2).toFixed(2),
+                    y: (leftBaseY - BLOCK_HEIGHT * 0.7).toFixed(2),
                     x: (leftPos[0] + 0.45).toFixed(2),
                     z: leftPos[2],
                   },
@@ -264,14 +264,14 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
                 height: rightHeight.toFixed(2),
                 connectablePoints: {
                   top: {
-                    y: (rightBaseY + rightHeight - BLOCK_HEIGHT * 0.8).toFixed(
+                    y: (rightBaseY + rightHeight - BLOCK_HEIGHT * 0.7).toFixed(
                       2
                     ),
                     x: (rightPos[0] - 0.45).toFixed(2),
                     z: rightPos[2],
                   },
                   bottom: {
-                    y: (rightBaseY - BLOCK_HEIGHT * 0.2).toFixed(2),
+                    y: (rightBaseY - BLOCK_HEIGHT * 0.7).toFixed(2),
                     x: (rightPos[0] - 0.45).toFixed(2),
                     z: rightPos[2],
                   },
