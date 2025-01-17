@@ -60,7 +60,13 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       }
 
       return [
-        [leftX, isTop ? leftBaseY + leftHeight - BLOCK_HEIGHT * 0.7 : leftBaseY, leftPos[2]],
+        [
+          leftX,
+          isTop
+            ? leftBaseY + leftHeight - BLOCK_HEIGHT * 0.7
+            : leftBaseY - BLOCK_HEIGHT * 0.5,
+          leftPos[2],
+        ],
         convergencePointRef.current,
       ] as const;
     }
@@ -74,7 +80,13 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
       return [
         convergencePointRef.current,
-        [rightX, isTop ? rightBaseY + rightHeight - BLOCK_HEIGHT * 0.7 : rightBaseY, rightPos[2]],
+        [
+          rightX,
+          isTop
+            ? rightBaseY + rightHeight - BLOCK_HEIGHT * 0.7
+            : rightBaseY + BLOCK_HEIGHT * 0.3,
+          rightPos[2],
+        ],
       ] as const;
     }
 
