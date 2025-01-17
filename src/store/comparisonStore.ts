@@ -24,6 +24,7 @@ interface ComparisonState {
   setLabelMode: (mode: "input" | "label") => void;
   setIsAnimating: (value: boolean) => void;
   setAnimationProgress: (value: number) => void;
+  clearAll: () => void;
 }
 
 export const useComparisonStore = create<ComparisonState>((set) => ({
@@ -77,4 +78,14 @@ export const useComparisonStore = create<ComparisonState>((set) => ({
   setLabelMode: (mode) => set({ labelMode: mode }),
   setIsAnimating: (value) => set({ isAnimating: value }),
   setAnimationProgress: (value) => set({ animationProgress: value }),
+  clearAll: () =>
+    set({
+      leftStack: 0,
+      rightStack: 0,
+      studentLines: {
+        top: false,
+        bottom: false,
+      },
+      mode: "none",
+    }),
 }));
