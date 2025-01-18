@@ -142,7 +142,7 @@ export function ControlPanel() {
           {/* Left Stack Controls */}
           <div className="flex flex-col items-center">
             <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-bold mr-2">Left</h3>
+              <h3 className="text-lg font-bold mr-2">L</h3>
               <button
                 onClick={() => setStack("left", Math.max(0, leftStack - 1))}
                 className="p-2 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
@@ -170,7 +170,7 @@ export function ControlPanel() {
           {/* Right Stack Controls */}
           <div className="flex flex-col items-center">
             <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-bold mr-2">Right</h3>
+              <h3 className="text-lg font-bold mr-2">R</h3>
               <button
                 onClick={() => setStack("right", Math.max(0, rightStack - 1))}
                 className="p-2 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
