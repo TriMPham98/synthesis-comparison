@@ -141,7 +141,7 @@ export function ControlPanel() {
         <div className="flex justify-around md:hidden">
           {/* Left Stack Controls */}
           <div className="flex flex-col items-center">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1">
               <h3 className="text-lg font-bold mr-2">L</h3>
               <button
                 onClick={() => setStack("left", Math.max(0, leftStack - 1))}
@@ -169,7 +169,7 @@ export function ControlPanel() {
 
           {/* Right Stack Controls */}
           <div className="flex flex-col items-center">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1">
               <h3 className="text-lg font-bold mr-2">R</h3>
               <button
                 onClick={() => setStack("right", Math.max(0, rightStack - 1))}
@@ -199,7 +199,7 @@ export function ControlPanel() {
         {/* Original Left Stack Controls - Hidden on Mobile */}
         <div className="hidden md:flex md:flex-col md:items-center">
           <h3 className="text-lg md:text-xl font-bold md:mb-4">Left Stack</h3>
-          <div className="flex items-center space-x-2 md:space-x-4">
+          <div className="flex items-center space-x-1 md:space-x-2">
             <button
               onClick={() => setStack("left", Math.max(0, leftStack - 1))}
               className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
@@ -225,7 +225,7 @@ export function ControlPanel() {
         {/* Original Right Stack Controls - Hidden on Mobile */}
         <div className="hidden md:flex md:flex-col md:items-center">
           <h3 className="text-lg md:text-xl font-bold md:mb-4">Right Stack</h3>
-          <div className="flex items-center space-x-2 md:space-x-4">
+          <div className="flex items-center space-x-1 md:space-x-2">
             <button
               onClick={() => setStack("right", Math.max(0, rightStack - 1))}
               className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
