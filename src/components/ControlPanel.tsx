@@ -6,6 +6,8 @@ import {
   Play,
   Eye,
   Trash2,
+  VolumeX,
+  Volume2,
 } from "lucide-react";
 import { useComparisonStore } from "../store/comparisonStore";
 
@@ -21,6 +23,8 @@ export function ControlPanel() {
     showAutoLines,
     toggleAutoLines,
     clearAll,
+    soundEnabled,
+    toggleSound,
   } = useComparisonStore();
 
   const handleModeClick = (newMode: "addRemove" | "drawCompare" | "none") => {
@@ -88,13 +92,13 @@ export function ControlPanel() {
                     toggleAutoLines();
                   }
                 }}
-                className="px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center bg-red-600 hover:bg-red-700">
+                className="px-6 py-3 rounded-lg flex items-center space-x-2 w-[180px] justify-center bg-red-600 hover:bg-red-700">
                 <Trash2 size={24} />
                 <span>Clear All</span>
               </button>
               <button
                 onClick={() => handleModeClick("drawCompare")}
-                className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center ${
+                className={`px-6 py-3 rounded-lg flex items-center space-x-2 w-[180px] justify-center ${
                   mode === "drawCompare" ? "bg-blue-600" : "bg-gray-700"
                 }`}>
                 <Pencil size={24} />
@@ -103,7 +107,7 @@ export function ControlPanel() {
               <button
                 onClick={handleAnimateClick}
                 disabled={!studentLines.top || !studentLines.bottom}
-                className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center
+                className={`px-6 py-3 rounded-lg flex items-center space-x-2 w-[180px] justify-center
                   ${
                     !studentLines.top || !studentLines.bottom
                       ? "bg-gray-600 cursor-not-allowed"
@@ -116,7 +120,7 @@ export function ControlPanel() {
             <div className="flex justify-center space-x-4">
               <button
                 onClick={() => handleModeClick("addRemove")}
-                className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center ${
+                className={`px-6 py-3 rounded-lg flex items-center space-x-2 w-[180px] justify-center ${
                   mode === "addRemove" ? "bg-blue-600" : "bg-gray-700"
                 }`}>
                 <MousePointer2 size={24} />
@@ -124,11 +128,19 @@ export function ControlPanel() {
               </button>
               <button
                 onClick={toggleAutoLines}
-                className={`px-6 py-3 rounded-lg flex items-center space-x-2 min-w-[160px] justify-center ${
+                className={`px-6 py-3 rounded-lg flex items-center space-x-2 w-[180px] justify-center ${
                   showAutoLines ? "bg-blue-600" : "bg-gray-700"
                 }`}>
                 <Eye size={24} />
-                <span>Auto&nbsp;Lines</span>
+                <span>Auto Lines</span>
+              </button>
+              <button
+                onClick={toggleSound}
+                className={`px-6 py-3 rounded-lg flex items-center space-x-2 w-[180px] justify-center ${
+                  soundEnabled ? "bg-blue-600" : "bg-gray-700"
+                }`}>
+                {soundEnabled ? <Volume2 size={24} /> : <VolumeX size={24} />}
+                <span>Sound {soundEnabled ? "On" : "Off"}</span>
               </button>
             </div>
           </div>

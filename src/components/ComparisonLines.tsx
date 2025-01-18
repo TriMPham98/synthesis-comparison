@@ -12,8 +12,14 @@ interface ComparisonLinesProps {
 }
 
 export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
-  const { mode, studentLines, isAnimating, setStudentLine, showAutoLines } =
-    useComparisonStore();
+  const {
+    mode,
+    studentLines,
+    isAnimating,
+    setStudentLine,
+    showAutoLines,
+    soundEnabled,
+  } = useComparisonStore();
   const animationProgress = useComparisonStore(
     (state) => state.animationProgress
   );
@@ -52,10 +58,10 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
         audioRef.current.currentTime = 0;
         audioRef.current.pause();
       }
-    } else if (animationProgress >= 0.99) {
+    } else if (animationProgress >= 0.99 && soundEnabled) {
       audioRef.current?.play();
     }
-  }, [isAnimating, animationProgress]);
+  }, [isAnimating, animationProgress, soundEnabled]);
 
   useFrame((_, delta) => {
     if (isAnimating) {
@@ -271,9 +277,11 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       );
 
       if (endPosition) {
-        const blockPopAudio = new Audio("/sounds/connectBlock.mp3");
-        blockPopAudio.volume = 0.5;
-        blockPopAudio.play();
+        if (soundEnabled) {
+          const blockPopAudio = new Audio("/sounds/connectBlock.mp3");
+          blockPopAudio.volume = 0.5;
+          blockPopAudio.play();
+        }
         setStudentLine(drawingLine.position, true);
       }
       setDrawingLine(null);
