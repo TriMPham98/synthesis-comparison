@@ -38,6 +38,12 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
 
   useEffect(() => {
     audioRef.current = new Audio("/sounds/correctCompare.mp3");
+    const blockPopAudio = new Audio("/sounds/connectBlock.mp3");
+    audioRef.current.volume = 0.5;
+    blockPopAudio.volume = 0.5;
+    return () => {
+      audioRef.current = null;
+    };
   }, []);
 
   useFrame((_, delta) => {
@@ -146,8 +152,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   const isNearStackPoint = (
     point: THREE.Vector3,
     side: "left" | "right",
-    preferredPosition?: "top" | "bottom",
-    isClick: boolean = false
+    preferredPosition?: "top" | "bottom"
   ): "top" | "bottom" | null => {
     const stackPos = side === "left" ? leftPos : rightPos;
     const stackCount = side === "left" ? leftStack : rightStack;
@@ -219,14 +224,13 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     if (!drawingLine) {
       // Check both positions to see which one was clicked
       const leftTopPosition =
-        !studentLines.top && isNearStackPoint(point, "left", "top", true);
+        !studentLines.top && isNearStackPoint(point, "left", "top");
       const leftBottomPosition =
-        !studentLines.bottom && isNearStackPoint(point, "left", "bottom", true);
+        !studentLines.bottom && isNearStackPoint(point, "left", "bottom");
       const rightTopPosition =
-        !studentLines.top && isNearStackPoint(point, "right", "top", true);
+        !studentLines.top && isNearStackPoint(point, "right", "top");
       const rightBottomPosition =
-        !studentLines.bottom &&
-        isNearStackPoint(point, "right", "bottom", true);
+        !studentLines.bottom && isNearStackPoint(point, "right", "bottom");
 
       // Determine which position was clicked
       if (leftTopPosition || rightTopPosition) {
@@ -255,11 +259,13 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
       const endPosition = isNearStackPoint(
         point,
         targetSide,
-        drawingLine.position,
-        true
+        drawingLine.position
       );
 
       if (endPosition) {
+        const blockPopAudio = new Audio("/sounds/connectBlock.mp3");
+        blockPopAudio.volume = 0.5;
+        blockPopAudio.play();
         setStudentLine(drawingLine.position, true);
       }
       setDrawingLine(null);
