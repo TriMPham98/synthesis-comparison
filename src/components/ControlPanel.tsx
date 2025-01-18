@@ -97,7 +97,7 @@ export function ControlPanel() {
                   isAnimating ||
                   isPlayingSound
                 }
-                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 relative overflow-hidden
+                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center relative overflow-hidden
                   ${
                     !studentLines.top || !studentLines.bottom
                       ? "bg-gray-600 cursor-not-allowed"
@@ -108,7 +108,7 @@ export function ControlPanel() {
                 {/* Animation progress bar */}
                 {(isAnimating || isPlayingSound) && (
                   <div
-                    className="absolute inset-0 bg-green-400/30"
+                    className="absolute inset-0 bg-green-400/30 -z-10"
                     style={{
                       width: isPlayingSound
                         ? "100%"
@@ -118,9 +118,11 @@ export function ControlPanel() {
                   />
                 )}
                 {/* Button content */}
-                <Play size={18} className="md:hidden z-10" />
-                <Play size={22} className="hidden md:block z-10" />
-                <span className="text-xs md:text-base z-10">Animate</span>
+                <div className="w-[85px] md:w-[100px] flex items-center justify-center space-x-2">
+                  <Play size={18} className="md:hidden" />
+                  <Play size={22} className="hidden md:block" />
+                  <span className="text-xs md:text-base">Animate</span>
+                </div>
               </button>
             </div>
             <div className="grid grid-cols-3 gap-2">
