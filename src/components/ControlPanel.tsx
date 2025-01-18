@@ -54,15 +54,16 @@ export function ControlPanel() {
   };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white py-4">
-      <div className="max-w-6xl mx-auto px-8 flex justify-center items-center gap-24">
-        <div className="flex flex-col items-center">
-          <h3 className="text-xl font-bold mb-4 text-center">Left Stack</h3>
-          <div className="flex items-center space-x-4">
+    <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white py-2 px-4 md:py-4">
+      <div className="w-full flex flex-col md:flex-row md:justify-center md:items-center md:gap-24 gap-4">
+        {/* Left Stack Controls */}
+        <div className="flex items-center justify-between md:flex-col md:items-center">
+          <h3 className="text-lg md:text-xl font-bold md:mb-4">Left Stack</h3>
+          <div className="flex items-center space-x-2 md:space-x-4">
             <button
               onClick={() => setStack("left", Math.max(0, leftStack - 1))}
-              className="p-4 bg-blue-400 rounded-lg hover:bg-blue-500">
-              <Minus size={24} />
+              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+              <Minus size={20} />
             </button>
             <input
               type="number"
@@ -71,76 +72,90 @@ export function ControlPanel() {
                 const newValue = e.target.value ? parseInt(e.target.value) : 0;
                 setStack("left", Math.min(10, Math.max(0, newValue)));
               }}
-              className="w-24 bg-gray-800 rounded-lg px-4 py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-16 md:w-24 bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <button
               onClick={() => setStack("left", Math.min(10, leftStack + 1))}
-              className="p-4 bg-blue-400 rounded-lg hover:bg-blue-500">
-              <Plus size={24} />
+              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+              <Plus size={20} />
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col items-center">
-          <h3 className="text-xl font-bold mb-4 text-center">Mode</h3>
-          <div className="flex flex-col space-y-2">
-            <div className="flex justify-center space-x-4">
+        {/* Mode Controls */}
+        <div className="flex-1 flex flex-col items-center">
+          <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-4">Mode</h3>
+          <div className="flex flex-col space-y-2 w-full max-w-xl">
+            <div className="grid grid-cols-3 gap-2">
               <button
                 onClick={() => {
                   clearAll();
-                  if (showAutoLines) {
-                    toggleAutoLines();
-                  }
+                  if (showAutoLines) toggleAutoLines();
                 }}
-                className="px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center bg-red-600 hover:bg-red-700">
-                <Trash2 size={22} />
-                <span className="whitespace-nowrap">Clear All</span>
+                className="px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 touch-manipulation">
+                <Trash2 size={18} className="md:hidden" />
+                <Trash2 size={22} className="hidden md:block" />
+                <span className="text-sm md:text-base">Clear All</span>
               </button>
               <button
                 onClick={() => handleModeClick("drawCompare")}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
+                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 ${
                   mode === "drawCompare" ? "bg-blue-600" : "bg-gray-700"
-                }`}>
-                <Pencil size={22} />
-                <span className="whitespace-nowrap">Compare</span>
+                } touch-manipulation`}>
+                <Pencil size={18} className="md:hidden" />
+                <Pencil size={22} className="hidden md:block" />
+                <span className="text-sm md:text-base">Compare</span>
               </button>
               <button
                 onClick={handleAnimateClick}
                 disabled={!studentLines.top || !studentLines.bottom}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center
+                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2
                   ${
                     !studentLines.top || !studentLines.bottom
                       ? "bg-gray-600 cursor-not-allowed"
                       : "bg-green-600 hover:bg-green-700"
-                  }`}>
-                <Play size={22} />
-                <span className="whitespace-nowrap">Animate</span>
+                  } touch-manipulation`}>
+                <Play size={18} className="md:hidden" />
+                <Play size={22} className="hidden md:block" />
+                <span className="text-sm md:text-base">Animate</span>
               </button>
             </div>
-            <div className="flex justify-center space-x-4">
+            <div className="grid grid-cols-3 gap-2">
               <button
                 onClick={() => handleModeClick("addRemove")}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
+                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 ${
                   mode === "addRemove" ? "bg-blue-600" : "bg-gray-700"
-                }`}>
-                <MousePointerClickIcon size={22} />
-                <span className="whitespace-nowrap">Add/Remove</span>
+                } touch-manipulation`}>
+                <MousePointerClickIcon size={18} className="md:hidden" />
+                <MousePointerClickIcon size={22} className="hidden md:block" />
+                <span className="text-sm md:text-base">Add/Remove</span>
               </button>
               <button
                 onClick={toggleAutoLines}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
+                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 ${
                   showAutoLines ? "bg-blue-600" : "bg-gray-700"
-                }`}>
-                <Eye size={22} />
-                <span className="whitespace-nowrap">Auto Lines</span>
+                } touch-manipulation`}>
+                <Eye size={18} className="md:hidden" />
+                <Eye size={22} className="hidden md:block" />
+                <span className="text-sm md:text-base">Auto Lines</span>
               </button>
               <button
                 onClick={toggleSound}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
+                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 ${
                   soundEnabled ? "bg-blue-600" : "bg-gray-700"
-                }`}>
-                {soundEnabled ? <Volume2 size={22} /> : <VolumeX size={22} />}
-                <span className="whitespace-nowrap">
+                } touch-manipulation`}>
+                {soundEnabled ? (
+                  <>
+                    <Volume2 size={18} className="md:hidden" />
+                    <Volume2 size={22} className="hidden md:block" />
+                  </>
+                ) : (
+                  <>
+                    <VolumeX size={18} className="md:hidden" />
+                    <VolumeX size={22} className="hidden md:block" />
+                  </>
+                )}
+                <span className="text-sm md:text-base">
                   Sound {soundEnabled ? "On" : "Off"}
                 </span>
               </button>
@@ -148,13 +163,14 @@ export function ControlPanel() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center">
-          <h3 className="text-xl font-bold mb-4 text-center">Right Stack</h3>
-          <div className="flex items-center space-x-4">
+        {/* Right Stack Controls */}
+        <div className="flex items-center justify-between md:flex-col md:items-center">
+          <h3 className="text-lg md:text-xl font-bold md:mb-4">Right Stack</h3>
+          <div className="flex items-center space-x-2 md:space-x-4">
             <button
               onClick={() => setStack("right", Math.max(0, rightStack - 1))}
-              className="p-4 bg-blue-400 rounded-lg hover:bg-blue-500">
-              <Minus size={24} />
+              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+              <Minus size={20} />
             </button>
             <input
               type="number"
@@ -163,12 +179,12 @@ export function ControlPanel() {
                 const newValue = e.target.value ? parseInt(e.target.value) : 0;
                 setStack("right", Math.min(10, Math.max(0, newValue)));
               }}
-              className="w-24 bg-gray-800 rounded-lg px-4 py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-16 md:w-24 bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <button
               onClick={() => setStack("right", Math.min(10, rightStack + 1))}
-              className="p-4 bg-blue-400 rounded-lg hover:bg-blue-500">
-              <Plus size={24} />
+              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+              <Plus size={20} />
             </button>
           </div>
         </div>
