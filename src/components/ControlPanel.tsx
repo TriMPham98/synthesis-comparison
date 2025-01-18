@@ -53,6 +53,12 @@ export function ControlPanel() {
     }, 1000); // Back to 1 second since we're only doing one animation
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === "Escape") {
+      e.currentTarget.blur();
+    }
+  };
+
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white py-2 px-4 md:py-4">
       <div className="w-full flex flex-col md:flex-row md:justify-center md:items-center md:gap-10 gap-4">
@@ -157,6 +163,7 @@ export function ControlPanel() {
                     : 0;
                   setStack("left", Math.min(10, Math.max(0, newValue)));
                 }}
+                onKeyDown={handleKeyDown}
                 className="w-12 h-[40px] bg-gray-800 rounded-lg px-2 py-2 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <button
@@ -185,6 +192,7 @@ export function ControlPanel() {
                     : 0;
                   setStack("right", Math.min(10, Math.max(0, newValue)));
                 }}
+                onKeyDown={handleKeyDown}
                 className="w-12 h-[40px] bg-gray-800 rounded-lg px-2 py-2 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <button
@@ -212,6 +220,7 @@ export function ControlPanel() {
                 const newValue = e.target.value ? parseInt(e.target.value) : 0;
                 setStack("left", Math.min(10, Math.max(0, newValue)));
               }}
+              onKeyDown={handleKeyDown}
               className="w-12 md:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <button
@@ -238,6 +247,7 @@ export function ControlPanel() {
                 const newValue = e.target.value ? parseInt(e.target.value) : 0;
                 setStack("right", Math.min(10, Math.max(0, newValue)));
               }}
+              onKeyDown={handleKeyDown}
               className="w-12 md:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <button
