@@ -2,7 +2,7 @@
 
 A React Three.js application for visualizing and comparing numerical quantities up to 10 in an interactive 3D environment.
 
-![synthesisComparisonDemo](https://github.com/user-attachments/assets/2755b5cd-6514-4170-8a7f-e14e7c85a571)
+![SynthesisComparisonWidget](https://github.com/user-attachments/assets/30bb439f-85ae-4a9c-a3ee-27f7cd4debc3)
 
 ## Features
 
