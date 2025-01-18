@@ -87,8 +87,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     }
 
     if (leftStack === 0 && rightStack === 0) {
-      const topOffset = -0.05;
-      const bottomOffset = -0.55;
+      const topOffset = 0.95;
+      const bottomOffset = 0.45;
 
       return [
         [leftX, isTop ? topOffset : bottomOffset, leftPos[2]],
@@ -99,7 +99,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     if (rightStack === 0) {
       if (!convergencePointRef.current) {
         const convergenceX = rightX + 0.3;
-        const convergenceY = -0.3;
+        const convergenceY = 0.7;
         convergencePointRef.current = [convergenceX, convergenceY, rightPos[2]];
       }
 
@@ -118,7 +118,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     if (leftStack === 0) {
       if (!convergencePointRef.current) {
         const convergenceX = leftX - 0.3;
-        const convergenceY = -0.3;
+        const convergenceY = 0.7;
         convergencePointRef.current = [convergenceX, convergenceY, leftPos[2]];
       }
 

@@ -20,7 +20,7 @@ function CameraController() {
 
   useFrame(({ camera }) => {
     if (mode === "drawCompare") {
-      const targetCameraPos = new THREE.Vector3(0, 0, 14);
+      const targetCameraPos = new THREE.Vector3(0, 0, 12.5);
       camera.position.lerp(targetCameraPos, 0.05);
       camera.lookAt(targetPosition);
     } else if (mode === "addRemove") {
@@ -68,8 +68,8 @@ function CameraController() {
 }
 
 export default function App() {
-  const leftPosition: [number, number, number] = [-2, 0, 0];
-  const rightPosition: [number, number, number] = [2, 0, 0];
+  const leftPosition: [number, number, number] = [-2, 1, 0];
+  const rightPosition: [number, number, number] = [2, 1, 0];
 
   return (
     <div className="w-full h-screen bg-gray-900">
