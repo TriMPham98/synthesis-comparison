@@ -362,14 +362,14 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   };
 
   return (
-    <group>
+    <group renderOrder={1}>
       <Plane
         args={[20, 20]}
         position={[0, 0, -0.1]}
         onClick={handleClick}
         onPointerMove={handlePointerMove}
         visible={false}>
-        <meshBasicMaterial transparent opacity={0} />
+        <meshBasicMaterial transparent opacity={0} depthTest={false} />
       </Plane>
 
       {/* Auto comparison lines */}
@@ -386,6 +386,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             transparent
             opacity={0.5}
             toneMapped={false}
+            depthTest={false}
           />
           {/* Auto bottom line */}
           <Line
@@ -398,6 +399,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             transparent
             opacity={0.5}
             toneMapped={false}
+            depthTest={false}
           />
         </>
       )}
@@ -413,6 +415,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             transparent
             opacity={0.4}
             toneMapped={false}
+            depthTest={false}
           />
           {/* Inner bright line */}
           <Line
@@ -423,6 +426,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             transparent
             opacity={0.9}
             toneMapped={false}
+            depthTest={false}
           />
         </>
       )}
@@ -437,6 +441,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             transparent
             opacity={0.4}
             toneMapped={false}
+            depthTest={false}
           />
           {/* Inner bright line */}
           <Line
@@ -447,6 +452,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             transparent
             opacity={0.9}
             toneMapped={false}
+            depthTest={false}
           />
         </>
       )}
@@ -470,6 +476,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             transparent
             opacity={0.3}
             toneMapped={false}
+            depthTest={false}
           />
           {/* Inner bright line for preview */}
           <Line
@@ -489,6 +496,7 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
             transparent
             opacity={0.6}
             toneMapped={false}
+            depthTest={false}
           />
         </>
       )}
