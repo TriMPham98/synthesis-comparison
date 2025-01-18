@@ -16,6 +16,8 @@ interface ComparisonState {
   labelMode: "input" | "label";
   isAnimating: boolean;
   animationProgress: number;
+  soundEnabled: boolean;
+  toggleSound: () => void;
   setStack: (side: "left" | "right", value: number) => void;
   setMode: (mode: "none" | "addRemove" | "drawCompare") => void;
   toggleAutoLines: () => void;
@@ -43,6 +45,8 @@ export const useComparisonStore = create<ComparisonState>((set) => ({
   labelMode: "label",
   isAnimating: false,
   animationProgress: 0,
+  soundEnabled: true,
+  toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
   setStack: (side, value) =>
     set(() => ({
       ...(side === "left" ? { leftStack: value } : { rightStack: value }),
