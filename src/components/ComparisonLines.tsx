@@ -19,6 +19,8 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     setStudentLine,
     showAutoLines,
     soundEnabled,
+    setIsPlayingSound,
+    setIsAnimating,
   } = useComparisonStore();
   const animationProgress = useComparisonStore(
     (state) => state.animationProgress
@@ -53,19 +55,33 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
   }, []);
 
   useEffect(() => {
-    if (isAnimating) {
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.pause();
-      }
-    } else if (animationProgress >= 0.99 && soundEnabled) {
-      audioRef.current?.play();
+    if (isAnimating && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.pause();
     }
-  }, [isAnimating, animationProgress, soundEnabled]);
+  }, [isAnimating]);
 
   useFrame((_, delta) => {
     if (isAnimating) {
-      setAnimationProgress(Math.min(1, animationProgress + delta));
+      const newProgress = Math.min(1, animationProgress + delta);
+      setAnimationProgress(newProgress);
+
+      // If animation just completed
+      if (newProgress >= 1) {
+        setIsAnimating(false);
+        if (soundEnabled && audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play();
+          setIsPlayingSound(true);
+          audioRef.current.addEventListener(
+            "ended",
+            () => {
+              setIsPlayingSound(false);
+            },
+            { once: true }
+          ); // Add once: true to prevent memory leaks
+        }
+      }
     } else {
       setAnimationProgress(0);
     }

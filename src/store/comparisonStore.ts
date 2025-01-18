@@ -24,9 +24,11 @@ interface ComparisonState {
   setStudentLine: (position: "top" | "bottom", value: boolean) => void;
   setLabel: (side: "left" | "right", value: string) => void;
   setLabelMode: (mode: "input" | "label") => void;
-  setIsAnimating: (value: boolean) => void;
   setAnimationProgress: (value: number) => void;
   clearAll: () => void;
+  isPlayingSound: boolean;
+  setIsAnimating: (value: boolean) => void;
+  setIsPlayingSound: (value: boolean) => void;
 }
 
 export const useComparisonStore = create<ComparisonState>((set) => ({
@@ -80,7 +82,6 @@ export const useComparisonStore = create<ComparisonState>((set) => ({
       },
     })),
   setLabelMode: (mode) => set({ labelMode: mode }),
-  setIsAnimating: (value) => set({ isAnimating: value }),
   setAnimationProgress: (value) => set({ animationProgress: value }),
   clearAll: () =>
     set({
@@ -92,4 +93,7 @@ export const useComparisonStore = create<ComparisonState>((set) => ({
       },
       mode: "none",
     }),
+  isPlayingSound: false,
+  setIsAnimating: (value) => set({ isAnimating: value }),
+  setIsPlayingSound: (value) => set({ isPlayingSound: value }),
 }));

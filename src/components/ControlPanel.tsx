@@ -25,6 +25,9 @@ export function ControlPanel() {
     clearAll,
     soundEnabled,
     toggleSound,
+    isAnimating,
+    isPlayingSound,
+    animationProgress,
   } = useComparisonStore();
 
   const handleModeClick = (newMode: "addRemove" | "drawCompare" | "none") => {
@@ -40,17 +43,17 @@ export function ControlPanel() {
     isTyping ? "" : value.toString();
 
   const handleAnimateClick = () => {
-    // Only allow animation when both lines are drawn
-    if (!studentLines.top || !studentLines.bottom) {
+    // Only allow animation when both lines are drawn and not currently animating or playing sound
+    if (
+      !studentLines.top ||
+      !studentLines.bottom ||
+      isAnimating ||
+      isPlayingSound
+    ) {
       return;
     }
 
     setIsAnimating(true);
-
-    // Reset animation after completion
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 1000); // Back to 1 second since we're only doing one animation
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -88,16 +91,36 @@ export function ControlPanel() {
               </button>
               <button
                 onClick={handleAnimateClick}
-                disabled={!studentLines.top || !studentLines.bottom}
-                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2
+                disabled={
+                  !studentLines.top ||
+                  !studentLines.bottom ||
+                  isAnimating ||
+                  isPlayingSound
+                }
+                className={`px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 relative overflow-hidden
                   ${
                     !studentLines.top || !studentLines.bottom
                       ? "bg-gray-600 cursor-not-allowed"
+                      : isAnimating || isPlayingSound
+                      ? "bg-gray-600"
                       : "bg-green-600 hover:bg-green-700"
                   } touch-manipulation`}>
-                <Play size={18} className="md:hidden" />
-                <Play size={22} className="hidden md:block" />
-                <span className="text-xs md:text-base">Animate</span>
+                {/* Animation progress bar */}
+                {(isAnimating || isPlayingSound) && (
+                  <div
+                    className="absolute inset-0 bg-green-400/30"
+                    style={{
+                      width: isPlayingSound
+                        ? "100%"
+                        : `${animationProgress * 100}%`,
+                      transition: "width 16ms linear",
+                    }}
+                  />
+                )}
+                {/* Button content */}
+                <Play size={18} className="md:hidden z-10" />
+                <Play size={22} className="hidden md:block z-10" />
+                <span className="text-xs md:text-base z-10">Animate</span>
               </button>
             </div>
             <div className="grid grid-cols-3 gap-2">
