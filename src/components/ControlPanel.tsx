@@ -95,7 +95,7 @@ export function ControlPanel() {
                 className="px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 touch-manipulation">
                 <Trash2 size={18} className="md:hidden" />
                 <Trash2 size={22} className="hidden md:block" />
-                <span className="text-sm md:text-base">Clear All</span>
+                <span className="text-xs md:text-base">Clear All</span>
               </button>
               <button
                 onClick={() => handleModeClick("drawCompare")}
@@ -104,7 +104,7 @@ export function ControlPanel() {
                 } touch-manipulation`}>
                 <Pencil size={18} className="md:hidden" />
                 <Pencil size={22} className="hidden md:block" />
-                <span className="text-sm md:text-base">Compare</span>
+                <span className="text-xs md:text-base">Compare</span>
               </button>
               <button
                 onClick={handleAnimateClick}
@@ -117,7 +117,7 @@ export function ControlPanel() {
                   } touch-manipulation`}>
                 <Play size={18} className="md:hidden" />
                 <Play size={22} className="hidden md:block" />
-                <span className="text-sm md:text-base">Animate</span>
+                <span className="text-xs md:text-base">Animate</span>
               </button>
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -128,7 +128,7 @@ export function ControlPanel() {
                 } touch-manipulation`}>
                 <MousePointerClickIcon size={18} className="md:hidden" />
                 <MousePointerClickIcon size={22} className="hidden md:block" />
-                <span className="text-sm md:text-base">Add/Remove</span>
+                <span className="text-xs md:text-base">Add/Remove</span>
               </button>
               <button
                 onClick={toggleAutoLines}
@@ -137,7 +137,7 @@ export function ControlPanel() {
                 } touch-manipulation`}>
                 <Eye size={18} className="md:hidden" />
                 <Eye size={22} className="hidden md:block" />
-                <span className="text-sm md:text-base">Auto Lines</span>
+                <span className="text-xs md:text-base">Auto Lines</span>
               </button>
               <button
                 onClick={toggleSound}
@@ -155,7 +155,7 @@ export function ControlPanel() {
                     <VolumeX size={22} className="hidden md:block" />
                   </>
                 )}
-                <span className="text-sm md:text-base">
+                <span className="text-xs md:text-base">
                   Sound {soundEnabled ? "On" : "Off"}
                 </span>
               </button>
