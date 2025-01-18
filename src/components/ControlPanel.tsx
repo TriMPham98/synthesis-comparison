@@ -101,7 +101,7 @@ export function ControlPanel() {
                   ${
                     !studentLines.top || !studentLines.bottom
                       ? "bg-gray-600 cursor-not-allowed"
-                      : isAnimating || isPlayingSound
+                      : isAnimating
                       ? "bg-gray-600"
                       : "bg-green-600 hover:bg-green-700"
                   } touch-manipulation`}>
