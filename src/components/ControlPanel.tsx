@@ -72,7 +72,7 @@ export function ControlPanel() {
                 const newValue = e.target.value ? parseInt(e.target.value) : 0;
                 setStack("left", Math.min(10, Math.max(0, newValue)));
               }}
-              className="w-16 md:w-24 bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-12 md:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <button
               onClick={() => setStack("left", Math.min(10, leftStack + 1))}
@@ -179,7 +179,7 @@ export function ControlPanel() {
                 const newValue = e.target.value ? parseInt(e.target.value) : 0;
                 setStack("right", Math.min(10, Math.max(0, newValue)));
               }}
-              className="w-16 md:w-24 bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-12 md:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <button
               onClick={() => setStack("right", Math.min(10, rightStack + 1))}
