@@ -1,7 +1,7 @@
 import {
   Plus,
   Minus,
-  MousePointerClick,
+  MousePointerClickIcon,
   Pencil,
   Play,
   Eye,
@@ -123,7 +123,7 @@ export function ControlPanel() {
                 className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
                   mode === "addRemove" ? "bg-blue-600" : "bg-gray-700"
                 }`}>
-                <MousePointerClick size={22} />
+                <MousePointerClickIcon size={22} />
                 <span className="whitespace-nowrap">Add/Remove</span>
               </button>
               <button
