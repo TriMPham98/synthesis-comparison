@@ -56,34 +56,8 @@ export function ControlPanel() {
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white py-2 px-4 md:py-4">
       <div className="w-full flex flex-col md:flex-row md:justify-center md:items-center md:gap-10 gap-4">
-        {/* Left Stack Controls */}
-        <div className="flex items-center justify-between md:flex-col md:items-center">
-          <h3 className="text-lg md:text-xl font-bold md:mb-4">Left Stack</h3>
-          <div className="flex items-center space-x-2 md:space-x-4">
-            <button
-              onClick={() => setStack("left", Math.max(0, leftStack - 1))}
-              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
-              <Minus size={20} />
-            </button>
-            <input
-              type="number"
-              value={displayValue(leftStack, false)}
-              onChange={(e) => {
-                const newValue = e.target.value ? parseInt(e.target.value) : 0;
-                setStack("left", Math.min(10, Math.max(0, newValue)));
-              }}
-              className="w-12 md:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            />
-            <button
-              onClick={() => setStack("left", Math.min(10, leftStack + 1))}
-              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
-              <Plus size={20} />
-            </button>
-          </div>
-        </div>
-
-        {/* Mode Controls */}
-        <div className="flex flex-col items-center">
+        {/* Mode Controls - Shown first on mobile */}
+        <div className="flex flex-col items-center order-first md:order-none">
           <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-4">Mode</h3>
           <div className="flex flex-col space-y-2 w-full max-w-xl">
             <div className="grid grid-cols-3 gap-2">
@@ -163,8 +137,93 @@ export function ControlPanel() {
           </div>
         </div>
 
-        {/* Right Stack Controls */}
-        <div className="flex items-center justify-between md:flex-col md:items-center">
+        {/* Stack Controls Container for Mobile */}
+        <div className="flex justify-between md:hidden">
+          {/* Left Stack Controls */}
+          <div className="flex flex-col items-center">
+            <h3 className="text-lg font-bold mb-2">Left Stack</h3>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setStack("left", Math.max(0, leftStack - 1))}
+                className="p-2 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+                <Minus size={20} />
+              </button>
+              <input
+                type="number"
+                value={displayValue(leftStack, false)}
+                onChange={(e) => {
+                  const newValue = e.target.value
+                    ? parseInt(e.target.value)
+                    : 0;
+                  setStack("left", Math.min(10, Math.max(0, newValue)));
+                }}
+                className="w-12 h-[40px] bg-gray-800 rounded-lg px-2 py-2 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+              <button
+                onClick={() => setStack("left", Math.min(10, leftStack + 1))}
+                className="p-2 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+                <Plus size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Right Stack Controls */}
+          <div className="flex flex-col items-center">
+            <h3 className="text-lg font-bold mb-2">Right Stack</h3>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setStack("right", Math.max(0, rightStack - 1))}
+                className="p-2 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+                <Minus size={20} />
+              </button>
+              <input
+                type="number"
+                value={displayValue(rightStack, false)}
+                onChange={(e) => {
+                  const newValue = e.target.value
+                    ? parseInt(e.target.value)
+                    : 0;
+                  setStack("right", Math.min(10, Math.max(0, newValue)));
+                }}
+                className="w-12 h-[40px] bg-gray-800 rounded-lg px-2 py-2 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+              <button
+                onClick={() => setStack("right", Math.min(10, rightStack + 1))}
+                className="p-2 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+                <Plus size={20} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Original Left Stack Controls - Hidden on Mobile */}
+        <div className="hidden md:flex md:flex-col md:items-center">
+          <h3 className="text-lg md:text-xl font-bold md:mb-4">Left Stack</h3>
+          <div className="flex items-center space-x-2 md:space-x-4">
+            <button
+              onClick={() => setStack("left", Math.max(0, leftStack - 1))}
+              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+              <Minus size={20} />
+            </button>
+            <input
+              type="number"
+              value={displayValue(leftStack, false)}
+              onChange={(e) => {
+                const newValue = e.target.value ? parseInt(e.target.value) : 0;
+                setStack("left", Math.min(10, Math.max(0, newValue)));
+              }}
+              className="w-12 md:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+            <button
+              onClick={() => setStack("left", Math.min(10, leftStack + 1))}
+              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+              <Plus size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Original Right Stack Controls - Hidden on Mobile */}
+        <div className="hidden md:flex md:flex-col md:items-center">
           <h3 className="text-lg md:text-xl font-bold md:mb-4">Right Stack</h3>
           <div className="flex items-center space-x-2 md:space-x-4">
             <button
