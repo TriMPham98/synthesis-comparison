@@ -46,12 +46,20 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (isAnimating) {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.pause();
+      }
+    } else if (animationProgress >= 0.99) {
+      audioRef.current?.play();
+    }
+  }, [isAnimating, animationProgress]);
+
   useFrame((_, delta) => {
     if (isAnimating) {
       setAnimationProgress(Math.min(1, animationProgress + delta));
-      if (animationProgress + delta >= 1) {
-        audioRef.current?.play();
-      }
     } else {
       setAnimationProgress(0);
     }
