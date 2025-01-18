@@ -167,14 +167,14 @@ export function ComparisonLines({ leftPos, rightPos }: ComparisonLinesProps) {
     const BLOCK_HEIGHT = 0.5;
 
     const xDistance = Math.abs(point.x - stackPos[0]);
-    const X_THRESHOLD = 0.5;
-    const X_PREFERRED = 0.35;
+    const X_THRESHOLD = 1.0;
+    const X_PREFERRED = 0.65;
 
     if (preferredPosition && xDistance > X_PREFERRED) return null;
     if (!preferredPosition && xDistance > X_THRESHOLD) return null;
 
-    const Y_THRESHOLD = 0.4;
-    const Y_PREFERRED = 0.3;
+    const Y_THRESHOLD = 0.8;
+    const Y_PREFERRED = 0.6;
 
     if (stackCount === 0) {
       const baseY = stackPos[1] - BLOCK_HEIGHT * 0.75;
