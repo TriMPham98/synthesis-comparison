@@ -138,7 +138,7 @@ export function ControlPanel() {
         </div>
 
         {/* Stack Controls Container for Mobile */}
-        <div className="flex justify-between md:hidden">
+        <div className="flex justify-around md:hidden">
           {/* Left Stack Controls */}
           <div className="flex flex-col items-center">
             <h3 className="text-lg font-bold mb-2">Left Stack</h3>
