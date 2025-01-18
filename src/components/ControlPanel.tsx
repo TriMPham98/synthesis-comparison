@@ -1,7 +1,7 @@
 import {
   Plus,
   Minus,
-  Pointer,
+  MousePointer,
   Pencil,
   Play,
   Eye,
@@ -92,55 +92,57 @@ export function ControlPanel() {
                     toggleAutoLines();
                   }
                 }}
-                className="px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[160px] justify-center bg-red-600 hover:bg-red-700">
+                className="px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center bg-red-600 hover:bg-red-700">
                 <Trash2 size={22} />
-                <span>Clear All</span>
+                <span className="whitespace-nowrap">Clear All</span>
               </button>
               <button
                 onClick={() => handleModeClick("drawCompare")}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[160px] justify-center ${
+                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
                   mode === "drawCompare" ? "bg-blue-600" : "bg-gray-700"
                 }`}>
                 <Pencil size={22} />
-                <span>Compare</span>
+                <span className="whitespace-nowrap">Compare</span>
               </button>
               <button
                 onClick={handleAnimateClick}
                 disabled={!studentLines.top || !studentLines.bottom}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[160px] justify-center
+                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center
                   ${
                     !studentLines.top || !studentLines.bottom
                       ? "bg-gray-600 cursor-not-allowed"
                       : "bg-green-600 hover:bg-green-700"
                   }`}>
                 <Play size={22} />
-                <span>Animate</span>
+                <span className="whitespace-nowrap">Animate</span>
               </button>
             </div>
             <div className="flex justify-center space-x-4">
               <button
                 onClick={() => handleModeClick("addRemove")}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[160px] justify-center ${
+                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
                   mode === "addRemove" ? "bg-blue-600" : "bg-gray-700"
                 }`}>
-                <Pointer size={22} />
-                <span>Add/Remove</span>
+                <MousePointer size={22} />
+                <span className="whitespace-nowrap">Add/Remove</span>
               </button>
               <button
                 onClick={toggleAutoLines}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[160px] justify-center ${
+                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
                   showAutoLines ? "bg-blue-600" : "bg-gray-700"
                 }`}>
                 <Eye size={22} />
-                <span>Auto Lines</span>
+                <span className="whitespace-nowrap">Auto Lines</span>
               </button>
               <button
                 onClick={toggleSound}
-                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[160px] justify-center ${
+                className={`px-5 py-2.5 rounded-lg flex items-center space-x-2 w-[170px] justify-center ${
                   soundEnabled ? "bg-blue-600" : "bg-gray-700"
                 }`}>
                 {soundEnabled ? <Volume2 size={22} /> : <VolumeX size={22} />}
-                <span>Sound {soundEnabled ? "On" : "Off"}</span>
+                <span className="whitespace-nowrap">
+                  Sound {soundEnabled ? "On" : "Off"}
+                </span>
               </button>
             </div>
           </div>
