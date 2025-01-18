@@ -55,7 +55,7 @@ export function ControlPanel() {
 
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white py-2 px-4 md:py-4">
-      <div className="w-full flex flex-col md:flex-row md:justify-center md:items-center md:gap-24 gap-4">
+      <div className="w-full flex flex-col md:flex-row md:justify-center md:items-center md:gap-10 gap-4">
         {/* Left Stack Controls */}
         <div className="flex items-center justify-between md:flex-col md:items-center">
           <h3 className="text-lg md:text-xl font-bold md:mb-4">Left Stack</h3>
@@ -83,7 +83,7 @@ export function ControlPanel() {
         </div>
 
         {/* Mode Controls */}
-        <div className="flex-1 flex flex-col items-center">
+        <div className="flex flex-col items-center">
           <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-4">Mode</h3>
           <div className="flex flex-col space-y-2 w-full max-w-xl">
             <div className="grid grid-cols-3 gap-2">
