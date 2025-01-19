@@ -67,7 +67,9 @@ export function ControlPanel() {
       <div className="w-full flex flex-col md:flex-row md:justify-center md:items-center md:gap-10 gap-4">
         {/* Mode Controls - Shown first on mobile */}
         <div className="flex flex-col items-center order-first md:order-none">
-          <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-4">Mode</h3>
+          <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-4 hidden lg:block">
+            Mode
+          </h3>
           <div className="flex flex-col space-y-2 w-full max-w-xl">
             <div className="grid grid-cols-3 gap-2">
               <button
@@ -175,8 +177,13 @@ export function ControlPanel() {
         {/* Stack Controls Container - Updated for iPad */}
         <div className="flex flex-col md:flex-col lg:flex-row gap-4">
           {/* Left Stack Controls */}
-          <div className="hidden md:flex flex-col items-center">
-            <h3 className="text-lg md:text-xl font-bold md:mb-4">Left Stack</h3>
+          <div className="hidden md:flex lg:flex-col items-center">
+            <h3 className="text-lg md:text-xl font-bold md:mb-4 lg:block md:hidden">
+              Left Stack
+            </h3>
+            <h3 className="text-lg md:text-xl font-bold md:mr-2 lg:hidden">
+              L
+            </h3>
             <div className="flex items-center space-x-1 md:space-x-2">
               <button
                 onClick={() => setStack("left", Math.max(0, leftStack - 1))}
@@ -204,9 +211,12 @@ export function ControlPanel() {
           </div>
 
           {/* Right Stack Controls */}
-          <div className="hidden md:flex flex-col items-center">
-            <h3 className="text-lg md:text-xl font-bold md:mb-4">
+          <div className="hidden md:flex lg:flex-col items-center">
+            <h3 className="text-lg md:text-xl font-bold md:mb-4 lg:block md:hidden">
               Right Stack
+            </h3>
+            <h3 className="text-lg md:text-xl font-bold md:mr-2 lg:hidden">
+              R
             </h3>
             <div className="flex items-center space-x-1 md:space-x-2">
               <button
