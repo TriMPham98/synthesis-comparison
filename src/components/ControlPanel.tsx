@@ -78,7 +78,9 @@ export function ControlPanel() {
                 className="px-3 py-2 md:px-5 md:py-2.5 rounded-lg flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 touch-manipulation">
                 <Trash2 size={18} className="md:hidden" />
                 <Trash2 size={22} className="hidden md:block" />
-                <span className="text-xs md:text-base">Clear All</span>
+                <span className="text-xs md:text-sm lg:text-base">
+                  Clear All
+                </span>
               </button>
               <button
                 onClick={() => handleModeClick("drawCompare")}
@@ -87,7 +89,7 @@ export function ControlPanel() {
                 } touch-manipulation`}>
                 <Pencil size={18} className="md:hidden" />
                 <Pencil size={22} className="hidden md:block" />
-                <span className="text-xs md:text-base">Compare</span>
+                <span className="text-xs md:text-sm lg:text-base">Compare</span>
               </button>
               <button
                 onClick={handleAnimateClick}
@@ -131,7 +133,9 @@ export function ControlPanel() {
                 } touch-manipulation`}>
                 <MousePointerClickIcon size={18} className="md:hidden" />
                 <MousePointerClickIcon size={22} className="hidden md:block" />
-                <span className="text-xs md:text-base">Add/Remove</span>
+                <span className="text-xs md:text-sm lg:text-base">
+                  Add/Remove
+                </span>
               </button>
               <button
                 onClick={toggleAutoLines}
@@ -140,7 +144,9 @@ export function ControlPanel() {
                 } touch-manipulation`}>
                 <Eye size={18} className="md:hidden" />
                 <Eye size={22} className="hidden md:block" />
-                <span className="text-xs md:text-base">Auto Lines</span>
+                <span className="text-xs md:text-sm lg:text-base">
+                  Auto Lines
+                </span>
               </button>
               <button
                 onClick={toggleSound}
@@ -158,7 +164,7 @@ export function ControlPanel() {
                     <VolumeX size={22} className="hidden md:block" />
                   </>
                 )}
-                <span className="text-xs md:text-base">
+                <span className="text-xs md:text-sm lg:text-base">
                   Sound {soundEnabled ? "On" : "Off"}
                 </span>
               </button>
@@ -166,7 +172,70 @@ export function ControlPanel() {
           </div>
         </div>
 
-        {/* Stack Controls Container for Mobile */}
+        {/* Stack Controls Container - Updated for iPad */}
+        <div className="flex flex-col md:flex-col lg:flex-row gap-4">
+          {/* Left Stack Controls */}
+          <div className="hidden md:flex flex-col items-center">
+            <h3 className="text-lg md:text-xl font-bold md:mb-4">Left Stack</h3>
+            <div className="flex items-center space-x-1 md:space-x-2">
+              <button
+                onClick={() => setStack("left", Math.max(0, leftStack - 1))}
+                className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+                <Minus size={20} />
+              </button>
+              <input
+                type="number"
+                value={displayValue(leftStack, false)}
+                onChange={(e) => {
+                  const newValue = e.target.value
+                    ? parseInt(e.target.value)
+                    : 0;
+                  setStack("left", Math.min(10, Math.max(0, newValue)));
+                }}
+                onKeyDown={handleKeyDown}
+                className="w-12 md:w-16 lg:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+              <button
+                onClick={() => setStack("left", Math.min(10, leftStack + 1))}
+                className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+                <Plus size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Right Stack Controls */}
+          <div className="hidden md:flex flex-col items-center">
+            <h3 className="text-lg md:text-xl font-bold md:mb-4">
+              Right Stack
+            </h3>
+            <div className="flex items-center space-x-1 md:space-x-2">
+              <button
+                onClick={() => setStack("right", Math.max(0, rightStack - 1))}
+                className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+                <Minus size={20} />
+              </button>
+              <input
+                type="number"
+                value={displayValue(rightStack, false)}
+                onChange={(e) => {
+                  const newValue = e.target.value
+                    ? parseInt(e.target.value)
+                    : 0;
+                  setStack("right", Math.min(10, Math.max(0, newValue)));
+                }}
+                onKeyDown={handleKeyDown}
+                className="w-12 md:w-16 lg:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+              <button
+                onClick={() => setStack("right", Math.min(10, rightStack + 1))}
+                className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
+                <Plus size={20} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Stack Controls - keep as is */}
         <div className="flex justify-around md:hidden">
           {/* Left Stack Controls */}
           <div className="flex flex-col items-center">
@@ -224,60 +293,6 @@ export function ControlPanel() {
                 <Plus size={20} />
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Original Left Stack Controls - Hidden on Mobile */}
-        <div className="hidden md:flex md:flex-col md:items-center">
-          <h3 className="text-lg md:text-xl font-bold md:mb-4">Left Stack</h3>
-          <div className="flex items-center space-x-1 md:space-x-2">
-            <button
-              onClick={() => setStack("left", Math.max(0, leftStack - 1))}
-              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
-              <Minus size={20} />
-            </button>
-            <input
-              type="number"
-              value={displayValue(leftStack, false)}
-              onChange={(e) => {
-                const newValue = e.target.value ? parseInt(e.target.value) : 0;
-                setStack("left", Math.min(10, Math.max(0, newValue)));
-              }}
-              onKeyDown={handleKeyDown}
-              className="w-12 md:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            />
-            <button
-              onClick={() => setStack("left", Math.min(10, leftStack + 1))}
-              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
-              <Plus size={20} />
-            </button>
-          </div>
-        </div>
-
-        {/* Original Right Stack Controls - Hidden on Mobile */}
-        <div className="hidden md:flex md:flex-col md:items-center">
-          <h3 className="text-lg md:text-xl font-bold md:mb-4">Right Stack</h3>
-          <div className="flex items-center space-x-1 md:space-x-2">
-            <button
-              onClick={() => setStack("right", Math.max(0, rightStack - 1))}
-              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
-              <Minus size={20} />
-            </button>
-            <input
-              type="number"
-              value={displayValue(rightStack, false)}
-              onChange={(e) => {
-                const newValue = e.target.value ? parseInt(e.target.value) : 0;
-                setStack("right", Math.min(10, Math.max(0, newValue)));
-              }}
-              onKeyDown={handleKeyDown}
-              className="w-12 md:w-24 h-[40px] md:h-auto bg-gray-800 rounded-lg px-2 py-2 md:px-4 md:py-3 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            />
-            <button
-              onClick={() => setStack("right", Math.min(10, rightStack + 1))}
-              className="p-2 md:p-4 bg-blue-400 rounded-lg hover:bg-blue-500 touch-manipulation">
-              <Plus size={20} />
-            </button>
           </div>
         </div>
       </div>
